@@ -146,6 +146,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DfaToDriveTable.h" />
+    <ClInclude Include="NfaToDfa.h" />
+    <ClInclude Include="predefine.h" />
+    <ClInclude Include="ReOperatorProcess.h" />
+    <ClInclude Include="ReSymbolProcess.h" />
+    <ClInclude Include="ReToSuffixFormRe.h" />
+    <ClInclude Include="SuffixFormReToNfa.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DfaToDriveTable.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NfaToDfa.cpp" />
+    <ClCompile Include="ReOperatorProcess.cpp" />
+    <ClCompile Include="ReSymbolProcess.cpp" />
+    <ClCompile Include="ReToSuffixFormRe.cpp" />
+    <ClCompile Include="SuffixFormReToNfa.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
