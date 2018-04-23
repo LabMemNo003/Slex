@@ -1,6 +1,7 @@
 #include "ReOperatorProcess.h"
 
 #include <iostream>
+
 #include <stack>
 
 using namespace std;
@@ -61,23 +62,21 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
             if (re[i] < 128)
                 ascii[re[i]] = 0;
             else {
-                if (re[i] != HYPHEN) {
-                    if (re[i] == OPEN_PAREN) ascii[int('(')] = 0;
-                    else if (re[i] == CLOSE_PAREN) ascii[int(')')] = 0;
-                    else if (re[i] == KLEENE_CLOSURE) ascii[int('*')] = 0;
-                    else if (re[i] == UNION) ascii[int('|')] = 0;
-                    else if (re[i] == OPEN_CURLY) ascii[int('{')] = 0;
-                    else if (re[i] == CLOSE_CURLY) ascii[int('}')] = 0;
-                    else if (re[i] == PERIOD) ascii[int('.')] = 0;
-                    else if (re[i] == HYPHEN);
-                    else if (re[i] == CARET) ascii[int('^')] = 0;
-                    else if (re[i] == POSITIVE_CLOSURE) ascii[int('+')] = 0;
-                    else if (re[i] == QUESTION) ascii[int('?')] = 0;
-                    else if (re[i] == QUOTATION) ascii[int('\"')] = 0;
-                    else {
-                        cout << "ascii error1" << endl;
-                        getchar();
-                    }
+                if (re[i] == OPEN_PAREN) ascii[int('(')] = 0;
+                else if (re[i] == CLOSE_PAREN) ascii[int(')')] = 0;
+                else if (re[i] == KLEENE_CLOSURE) ascii[int('*')] = 0;
+                else if (re[i] == UNION) ascii[int('|')] = 0;
+                else if (re[i] == OPEN_CURLY) ascii[int('{')] = 0;
+                else if (re[i] == CLOSE_CURLY) ascii[int('}')] = 0;
+                else if (re[i] == PERIOD) ascii[int('.')] = 0;
+                else if (re[i] == HYPHEN);
+                else if (re[i] == CARET) ascii[int('^')] = 0;
+                else if (re[i] == POSITIVE_CLOSURE) ascii[int('+')] = 0;
+                else if (re[i] == QUESTION) ascii[int('?')] = 0;
+                else if (re[i] == QUOTATION) ascii[int('\"')] = 0;
+                else {
+                    cout << "ascii error1" << endl;
+                    getchar();
                 }
             }
             if (re[i] == HYPHEN) {
@@ -92,6 +91,11 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
                 }
             }
             i++;
+        }
+        if (v_temp.size() != 0) {
+            if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
+                v_temp.push_back(CANCATENATION);
+            }
         }
         v_temp.push_back(OPEN_PAREN);
         for (int j = 0;j < 128;j++) {
@@ -147,6 +151,11 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
                 }
             }
             i++;
+        }
+        if (v_temp.size() != 0) {
+            if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
+                v_temp.push_back(CANCATENATION);
+            }
         }
         v_temp.push_back(OPEN_PAREN);
         for (int j = 0;j < 128;j++) {
@@ -253,6 +262,11 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
 }
 
 void period(std::vector<SYMBOL> &v_temp) {
+    if (v_temp.size() != 0) {
+        if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
+            v_temp.push_back(CANCATENATION);
+        }
+    }
     v_temp.push_back(OPEN_PAREN);
     for (int i = 0;i < 128;i++) {
         if (i != 10) {
@@ -281,16 +295,17 @@ void quest(std::vector<SYMBOL> &v_temp) {
     v_temp.push_back(UNION);
     v_temp.push_back(EPSILON);
     v_temp.push_back(CLOSE_PAREN);
+
 }
 
 void positive(std::vector<SYMBOL> &v_temp) {
+    int s = v_temp.size();
+    v_temp.push_back(CANCATENATION);
+    for (int i = 0;i < s;i++)
+        v_temp.push_back(v_temp[i]);
+
     vector<SYMBOL>::iterator it = v_temp.begin();
     v_temp.insert(it, OPEN_PAREN);
-    int s = v_temp.size();
-    for (int i = 0;i < s;i++) {
-        v_temp.push_back(CANCATENATION);
-        v_temp.push_back(v_temp[i]);
-    }
     v_temp.push_back(KLEENE_CLOSURE);
     v_temp.push_back(CLOSE_PAREN);
 }
@@ -301,11 +316,20 @@ void other(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_temp
 
 void close_p(std::vector<SYMBOL> &v_temp_all, std::vector<SYMBOL> &v_temp_out) {
     v_temp_all.push_back(CLOSE_PAREN);
+    if (v_temp_out.size() != 0) {
+        if (v_temp_out[v_temp_out.size() - 1] != OPEN_PAREN&&v_temp_out[v_temp_out.size() - 1] != UNION)
+            v_temp_out.push_back(CANCATENATION);
+    }
     for (int i = 0;i < v_temp_all.size();i++)
         v_temp_out.push_back(v_temp_all[i]);
 }
 
 void temp_to_all(std::vector<SYMBOL> &v_temp, std::vector<SYMBOL> &v_temp_all) {
+    if (v_temp_all.size() != 0) {
+        if (v_temp_all[v_temp_all.size() - 1] != OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != UNION) {
+            v_temp_all.push_back(CANCATENATION);
+        }
+    }
     for (int i = 0;i < v_temp.size();i++)
         v_temp_all.push_back(v_temp[i]);
 }
@@ -453,5 +477,6 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
         }
         temp_to_all(v_temp, v);
     }
+
     return v;
 }
