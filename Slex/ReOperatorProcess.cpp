@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void display(vector<SYMBOL> &v) {
+void ReOperatorProcess::display(const vector<SYMBOL> &v) {
     cout << "the session is:" << endl;
     for (int i = 0; i < v.size();i++)
     {
@@ -326,9 +326,10 @@ void close_p(std::vector<SYMBOL> &v_temp_all, std::vector<SYMBOL> &v_temp_out) {
 
 void temp_to_all(std::vector<SYMBOL> &v_temp, std::vector<SYMBOL> &v_temp_all) {
     if (v_temp_all.size() != 0) {
-        if (v_temp_all[v_temp_all.size() - 1] != OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != UNION) {
-            v_temp_all.push_back(CANCATENATION);
-        }
+        if(v_temp[0]!= UNION)
+            if (v_temp_all[v_temp_all.size() - 1] != OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != UNION) {
+                v_temp_all.push_back(CANCATENATION);
+            }
     }
     for (int i = 0;i < v_temp.size();i++)
         v_temp_all.push_back(v_temp[i]);
