@@ -7,9 +7,8 @@ using namespace std;
 std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
 {
     std::vector<SYMBOL> v;
-    for (int i = 0;i < originalRe.size(); i++) {
+    for (unsigned int i = 0;i < originalRe.size(); i++) {
         if (originalRe[i] == '\\') {
-
             i++;
             int temp;
             char a1, a2, a3;
