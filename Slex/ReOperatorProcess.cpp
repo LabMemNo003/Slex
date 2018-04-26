@@ -7,8 +7,7 @@
 using namespace std;
 
 void ReOperatorProcess::display(const vector<SYMBOL> &v) {
-    cout << "the session is:" << endl;
-    for (int i = 0; i < v.size();i++)
+    for (int i = 0; i < int(v.size());i++)
     {
         if (v[i]<128) cout << char(v[i]);
         else {
@@ -31,6 +30,7 @@ void ReOperatorProcess::display(const vector<SYMBOL> &v) {
             else cout << "unknow";
         }
     }
+    cout << endl;
 }
 
 bool isnum(int a) {
@@ -39,7 +39,7 @@ bool isnum(int a) {
 }
 
 bool is_ext(int &i, std::vector<SYMBOL> &processedRe) {
-    if (i + 1 < processedRe.size()) {
+    if (i + 1 < int(processedRe.size())) {
         int c = processedRe[i + 1];
         if (c == KLEENE_CLOSURE || c == POSITIVE_CLOSURE || c == QUESTION)
             return true;
@@ -319,7 +319,7 @@ void close_p(std::vector<SYMBOL> &v_temp_all, std::vector<SYMBOL> &v_temp_out) {
         if (v_temp_out[v_temp_out.size() - 1] != OPEN_PAREN&&v_temp_out[v_temp_out.size() - 1] != UNION)
             v_temp_out.push_back(CANCATENATION);
     }
-    for (int i = 0;i < v_temp_all.size();i++)
+    for (int i = 0;i < int(v_temp_all.size());i++)
         v_temp_out.push_back(v_temp_all[i]);
 }
 
@@ -330,7 +330,7 @@ void temp_to_all(std::vector<SYMBOL> &v_temp, std::vector<SYMBOL> &v_temp_all) {
                 v_temp_all.push_back(CANCATENATION);
             }
     }
-    for (int i = 0;i < v_temp.size();i++)
+    for (int i = 0;i < int(v_temp.size());i++)
         v_temp_all.push_back(v_temp[i]);
 }
 
@@ -338,7 +338,7 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
     std::vector<SYMBOL> v_temp_all;
     v_temp_all.push_back(OPEN_PAREN);
     i++;
-    for (;i < processedRe.size();i++) {
+    for (;i < int(processedRe.size());i++) {
         int c = processedRe[i];
         std::vector<SYMBOL> v_temp;
         if (c == CLOSE_PAREN) {
@@ -412,7 +412,7 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
 std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
 {
     std::vector<SYMBOL> v;
-    for (int i = 0;i < processedRe.size();i++) {
+    for (int i = 0;i < int(processedRe.size());i++) {
         int c = processedRe[i];
         std::vector<SYMBOL> v_temp;
         if (c == OPEN_BRACKET) {

@@ -119,10 +119,10 @@ void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
             if ((i + 1 < originalRe.size()) && (originalRe[i + 1] >= '0'&&originalRe[i + 1] <= '7')) {
                 a3 = originalRe[i + 1];
                 i++;
-                v.push_back(64 * (a3 - '0') + 8 * (a2 - '0') + (a1 - '0'));
+                v.push_back(64 * (a1 - '0') + 8 * (a2 - '0') + (a3 - '0'));
             }
             else
-                v.push_back(8 * (a2 - '0') + (a1 - '0'));
+                v.push_back(8 * (a1 - '0') + (a2 - '0'));
         }
         else
             v.push_back(a1 - '0');
