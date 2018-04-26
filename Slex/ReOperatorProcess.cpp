@@ -31,7 +31,6 @@ void ReOperatorProcess::display(const vector<SYMBOL> &v) {
             else cout << "unknow";
         }
     }
-    cout << "\n" << endl;
 }
 
 bool isnum(int a) {
