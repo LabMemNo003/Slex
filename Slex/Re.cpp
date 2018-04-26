@@ -16,6 +16,9 @@ Re::Re(std::string original_re)
     std::vector<SYMBOL> processed_re_1 = rsp.DoIt(original_re);
     ReOperatorProcess rop;
     std::vector<SYMBOL> processed_re_2 = rop.DoIt(processed_re_1);
+#ifdef DEBUG
+    rop.display(processed_re_2);
+#endif // DEBUG
     ReToSuffixFormRe rtsf;
     SuffixFormRe suffix_form_re = rtsf.DoIt(processed_re_2);
     NFA nfa(suffix_form_re);
