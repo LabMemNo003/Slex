@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void display1(vector<SYMBOL> &v) {
+void display(vector<SYMBOL> &v) {
     cout << "the session is:" << endl;
     for (int i = 0; i < v.size();i++)
     {
