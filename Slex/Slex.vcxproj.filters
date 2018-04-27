@@ -36,6 +36,9 @@
     <ClInclude Include="SuffixFormReToNfa.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Re.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DfaToDriveTable.cpp">
@@ -57,6 +60,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SuffixFormReToNfa.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Re.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
