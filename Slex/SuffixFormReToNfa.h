@@ -15,6 +15,7 @@ class Node {
 public:
     NODE_ID ID;
     std::vector<Link*> links;
+    void setId(NODE_ID id) { this->ID = id; }
 };
 class Link {
 public:
@@ -28,6 +29,7 @@ public:
     std::vector<Node*> list;
     Graph() {  };
     Graph createGraph(int id1, int id2, TERMINAL t);
+
 };
 
 typedef class SuffixFormReToNfa {

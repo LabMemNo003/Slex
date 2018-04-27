@@ -63,9 +63,9 @@ std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) 
                         suffixRe.push_back(sym);
                         s.pop();
 					}
-                    while (!s.empty()) {
+                    //while (!s.empty()) {
                         s.pop();
-                    }
+                    //}
                     i++;
                     continue;
                     //cur = processedRe[i];  //skip ')'
