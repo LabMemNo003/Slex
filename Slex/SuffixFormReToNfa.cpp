@@ -156,6 +156,10 @@ Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
     }
     Graph finalGraph = NFAStack.top();
     this->NFAGraph = NFAStack.top();
+    for (int k = 0; k < this->NFAGraph.list.size(); k++) {
+        //cout << k << " ";
+        this->NFAGraph.list[k]->ID = k;
+    }
     return finalGraph;
 }
 
