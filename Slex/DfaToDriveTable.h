@@ -20,5 +20,6 @@ public:
     int Match(std::string input);
 
 private:
-
+	NODE_ID **DriveTable;
+	std::set<NODE_ID> FinalSet;
 }DriveTable;

@@ -31,7 +31,7 @@ int main() {
     string input = "1234567890";
 
     int matched_length = drive_table.Match(input);
-
+ 
     cout << matched_length << endl;
 
     return 0;
