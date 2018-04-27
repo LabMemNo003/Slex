@@ -133,20 +133,6 @@ void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s1(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
-    i++;
-    for (;i < originalRe.size();i++) {
-        if (originalRe[i] == ')') {
-            v.push_back(CLOSE_PAREN);
-            return;
-        }
-        else if (originalRe[i] == '\\')
-            slash(i, originalRe, v);
-        else
-            v.push_back(int(originalRe[i]));
-    }
-}
-
 void s2(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
@@ -214,7 +200,9 @@ std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
             switch (originalRe[i]) {
             case '(':
                 v.push_back(OPEN_PAREN);
-                s1(i, originalRe, v);
+                break;
+            case ')':
+                v.push_back(CLOSE_PAREN);
                 break;
             case '*':
                 v.push_back(KLEENE_CLOSURE);
