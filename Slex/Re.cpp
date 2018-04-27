@@ -20,20 +20,27 @@ Re::Re(std::string original_re)
     rop.display(processed_re_2);
 #endif // DEBUG
     ReToSuffixFormRe rtsf;
+	std::vector<SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
 #ifdef DEBUG
-    std::vector<SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
+	/*
     for (int i = 0; i < suffix_form_re.size(); i++) {
         cout << suffix_form_re[i] << " ";
     }
     cout << endl;
+	*/
 #endif
     
     NFA nfa(suffix_form_re);
-    nfa.output();
-    /*
-    DFA dfa(nfa);
-    dt = new DriveTable(dfa);
-    */
+    //nfa.output();
+    
+    DFA dfa(nfa);/*
+	int **a = new int*[dfa.GetStateNumber()];
+	for (int i = 0; i < dfa.GetStateNumber(); i++) {
+		a[i] = new int[128];
+	}
+	*/
+	dt = new DriveTable(dfa);
+    
 }
 
 Re::~Re()

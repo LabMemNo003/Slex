@@ -9,6 +9,7 @@ DfaToDriveTable::DfaToDriveTable(DFA dfa)
 void DfaToDriveTable::DoIt(NfaToDfa dfa)
 {
     /*-------------------------------Copy DriveTable--------------------------------------------------*/
+
 	DriveTable = new int*[dfa.GetStateNumber()];
 	for (int i = 0; i < dfa.GetStateNumber(); i++) {
 		DriveTable[i] = new int[128];
@@ -19,10 +20,16 @@ void DfaToDriveTable::DoIt(NfaToDfa dfa)
 			DriveTable[i][j] = dfa.GetDriveTable(i, j);
 		}
 	}
-	/*-------------------------------Copy FinalSet----------------------------------------------------*/
-	for (std::set <NODE_ID>::iterator Travel = dfa.GetFinalSet().begin(); Travel != dfa.GetFinalSet().end(); Travel++) {
-		FinalSet.insert(*Travel);
+
+	for (int i = 0; i < dfa.GetStateNumber(); i++) {
+		for (int j = 0; j < 128; j++) {
+			cout << DriveTable[i][j] << " ";
+		}
+		cout << endl;
 	}
+	/*-------------------------------Copy FinalSet----------------------------------------------------*/
+
+	FinalSet = dfa.GetFinalSet();
 }
 
 NODE_ID DfaToDriveTable::GetStartNodeID()
@@ -37,7 +44,7 @@ std::set<NODE_ID> DfaToDriveTable::GetFinalNodeIDs()
 
 NODE_ID DfaToDriveTable::GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal)
 {
-	return DriveTable[curNodeID][terminal];
+	return DriveTable[curNodeID-1][terminal];
 }
 
 int DfaToDriveTable::Match(std::string input)
@@ -49,11 +56,10 @@ int DfaToDriveTable::Match(std::string input)
 	for (int i = 0; input[i] != '/0'; i++) {
 
 		if (nextstate == -1)
-			return -1;//提前推出
+			return length;//提前退出
 		templength++;
-		nextstate = DriveTable[nextstate][input[i]];
+		nextstate = DriveTable[nextstate][(int)input[i]];
 	
-
 	    for (set<NODE_ID>::iterator travel = FinalSet.begin(); travel != FinalSet.end(); travel++) {
 		    if (*travel == nextstate) {
 				if (length < templength) {

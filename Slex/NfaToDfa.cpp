@@ -46,16 +46,13 @@ public:
 	bool append(T datain);
 	bool Stateoutput();
 	bool output();
-	bool rank(int mode);
-	bool HeadNodedestroy();
 	InkNode <T>*&  getHead();
 	InkNode <T>*&  getTail();
-	bool NFATableListdestroy();
 };
 
 template <class T>
 InkList <T>::InkList() {
-	Head = Tail = new InkNode <T>;
+	Head = 	Tail = new InkNode <T>;
 }
 
 template <class T>
@@ -123,100 +120,160 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
 	InkList<TableNode> DFADriveTable;//A list to record dfa's dirve table
 	InkList<StateNode> DFAStateList;//A list to record dfa's state
 	set<NODE_ID> FinalSet;
-	bool different = true;
+	bool different = false;
 	int row = 0;
+	int samelength = 0;
+	int length = 0;
+	int curNode = 0;
 	/*--------------------------Step1: make first node for DFAStateList-----------------------------*/
 	StateNode statenode;
-	statenode.CurrentState = 1;
+	statenode.CurrentState = 0;
 	statenode.state = nfa.CalculateEpsilonClosure(nfa.GetStartNodeID());
+	//cout << nfa.GetStartNodeID();
+	
 	InkNode<StateNode> *tempstatenodes = new InkNode<StateNode>(statenode, NULL);
-	tempstatenodes = DFAStateList.getHead()->Next;
+
+	DFAStateList.getHead()->Next = tempstatenodes;
 	DFAStateList.getTail() = tempstatenodes;
+
 	/*always insert the new node at the end of the list,so we need to care the tail node*/
 
 	/*----------------Step2:travel the DFAStateList to find every new state---------------------------*/
 	InkNode<StateNode> *movestatenode = DFAStateList.getHead()->Next;//use to move to different point,single direct
+
 	while (movestatenode != NULL) {
 		for (int i = 0; i < 128; i++) {
-			set<NODE_ID> newstate = nfa.CalculateEpsilonClosure(nfa.GetNextNodeIDs(movestatenode->Data.CurrentState, i));//get a state set,that's maybe a new state
-			InkNode<StateNode> *tempstatenode = DFAStateList.getHead()->Next;//check the state whether is a new state,always from the first node
-			while (tempstatenode != NULL) {
-				set<NODE_ID>::iterator TravelNode = tempstatenode->Data.state.begin();//node's set number
-				set<NODE_ID>::iterator TravelNewState = newstate.begin();//set from closure	
-				while (TravelNode != tempstatenode->Data.state.end() && TravelNewState != newstate.end()) {
-					if (*TravelNode != *TravelNewState) {
-						different = false;
-						break;
+			movestatenode->Data.state;
+			nfa.GetNextNodeIDs(movestatenode->Data.state, i);
+			nfa.CalculateEpsilonClosure(nfa.GetNextNodeIDs(movestatenode->Data.state, i));
+			set<NODE_ID> newstate = nfa.CalculateEpsilonClosure(nfa.GetNextNodeIDs(movestatenode->Data.state, i));//get a state set,that's maybe a new state
+					/*-------------------Check The StateList----------------------------------*/
+			
+			if (!newstate.empty()) {
+				InkNode<StateNode> *tempstatenode = DFAStateList.getHead()->Next;//check the state whether is a new state,always from the first node
+				while (tempstatenode != NULL) {
+					set<NODE_ID>::iterator TravelNode = tempstatenode->Data.state.begin();//node's set number
+					set<NODE_ID>::iterator TravelNewState = newstate.begin();//set from closure	
+
+					while (TravelNode != tempstatenode->Data.state.end() && TravelNewState != newstate.end()) {
+						if (*TravelNode == *TravelNewState) {
+							samelength++;
+						}
+						length++;
+						TravelNewState++;
+						TravelNode++;
 					}
-					TravelNewState++;
-					TravelNode++;
-				}
-				if (TravelNode != tempstatenode->Data.state.end() || TravelNewState != newstate.end()) {
-					different = false;
-				}
+					
+					//长度不同
+					if ((TravelNode == tempstatenode->Data.state.end() && TravelNewState != newstate.end()) || (TravelNode != tempstatenode->Data.state.end() && TravelNewState == newstate.end())) {
+						different = true;
+					}
 
-				if (different) {//the newstate is a new state, so we need to add this state to StateList
-					StateNode data;
-					data.CurrentState = tempstatenode->Data.CurrentState++;
-					data.state = newstate;
-					InkNode<StateNode> *newstatenode = new InkNode<StateNode>(data, NULL);
-					DFAStateList.getTail()->Next = newstatenode;
-					DFAStateList.getTail() = newstatenode;
-
-					/*-------------------------------------FinalSet-------------------------------------------*/
-					for (set<NODE_ID>::iterator TravelNewState = newstate.begin(); TravelNewState != newstate.end(); TravelNewState++) {
-						if (*TravelNewState == nfa.GetFinalNodeID()) {//get final state
-							FinalSet.insert(newstatenode->Data.CurrentState);
+					if (TravelNode == tempstatenode->Data.state.end() && TravelNewState == newstate.end()) {
+						if (samelength != length) {
+							different = true;
+						}
+						else {
+							different = false;
+							curNode = tempstatenode->Data.CurrentState;
 							break;
 						}
 					}
 
+					samelength = 0;	length = 0;
+					tempstatenode = tempstatenode->Next;
+				}
+				/*--------------------------------Add New State to StateList---------------------------------------*/
+				if (different) {//the newstate is a new state, so we need to add this state to StateList
+					StateNode data;
+					data.CurrentState = DFAStateList.getTail()->Data.CurrentState + 1;
+					data.state = newstate;
+					InkNode<StateNode> *neweststatenode = new InkNode<StateNode>(data, NULL);
+					DFAStateList.getTail()->Next = neweststatenode;
+					DFAStateList.getTail() = neweststatenode;
+
+					/*-------------------------------------FinalSet-------------------------------------------*/
+					for (set<NODE_ID>::iterator TravelNewState = newstate.begin(); TravelNewState != newstate.end(); TravelNewState++) {
+						if (*TravelNewState == nfa.GetFinalNodeID()) {//get final state
+							FinalSet.insert(neweststatenode->Data.CurrentState);
+							break;
+						}
+					}
+				}
+				/*------------------add new state to DFADirveTable---------------------------*/
+				StateNode statedata;
+				if (different) {
+					statedata.CurrentState = DFAStateList.getTail()->Data.CurrentState;
 					different = false;
 				}
-				tempstatenode = tempstatenode->Next;
+				else{
+					statedata.CurrentState = curNode;
+					different = false;
+				}
+
+				statedata.state = newstate;
+				InkNode<StateNode> *newstatedata = new InkNode<StateNode>(statedata, NULL);
+
+				TableNode tabledata;
+				tabledata.CurrentState = movestatenode->Data.CurrentState;
+				tabledata.Terminal = i;
+				tabledata.state = movestatenode->Data.state;
+				tabledata.childnode = newstatedata;
+				InkNode<TableNode> *temptabledrive = new InkNode<TableNode>(tabledata, NULL);
+
+				temptabledrive->Next = DFADriveTable.getHead()->Next;
+				DFADriveTable.getHead()->Next = temptabledrive;
 			}
-			/*------------------add new state to DFADirveTable---------------------------*/
-			StateNode statedata;
-			statedata.CurrentState = tempstatenode->Data.CurrentState;
-			statedata.state = newstate;
-			InkNode<StateNode> *newstatedata = new InkNode<StateNode>(statedata, NULL);
+			else {
+				/*------------------add new state to DFADirveTable---------------------------*/
+				StateNode statedata;
+				statedata.CurrentState = -1;
+				InkNode<StateNode> *newstatedata = new InkNode<StateNode>(statedata, NULL);
 
-			TableNode tabledata;
-			tabledata.CurrentState = movestatenode->Data.CurrentState;
-			tabledata.Terminal = i;
-			tabledata.state = movestatenode->Data.state;
-			tabledata.childnode = newstatedata;
-			InkNode<TableNode> *temptabledirve = new InkNode<TableNode>(tabledata, NULL);
+				TableNode tabledata;
+				tabledata.CurrentState = movestatenode->Data.CurrentState;
+				tabledata.Terminal = i;
+				tabledata.state = movestatenode->Data.state;
+				tabledata.childnode = newstatedata;
+				InkNode<TableNode> *temptabledrive = new InkNode<TableNode>(tabledata, NULL);
 
-			DFADriveTable.getTail()->Next = temptabledirve;
-			DFADriveTable.getTail() = temptabledirve;
+				temptabledrive->Next = DFADriveTable.getHead()->Next;
+				DFADriveTable.getHead()->Next = temptabledrive;
+			}
 		}
+
 		movestatenode = movestatenode->Next;
 	}
 	FINALSET = FinalSet;
 	/*-------------------------------------DFA Table------------------------------------------------------------*/
 	InkNode<TableNode> *newmovetablenode = DFADriveTable.getHead()->Next;
-	InkNode<StateNode> *newmovestatenode = DFAStateList.getHead()->Next;
-	
+	InkNode<StateNode> *newmovestatenode = DFAStateList.getHead()->Next; 
 	while (newmovestatenode != NULL) {
 		row++;
 		newmovestatenode = newmovestatenode->Next;
 	}
+	
+	/*while (newmovetablenode != NULL) {
+		cout << "当前状态：" << newmovetablenode->Data.CurrentState << "通过" << newmovetablenode->Data.Terminal << "可达" << newmovetablenode->Data.childnode->Data.CurrentState << endl;
+		newmovetablenode = newmovetablenode->Next;
+	}*/
+
 	DriveTable = new int*[row];
 	for (int i = 0; i < row; i++) {
 		DriveTable[i] = new int[128];
 	}
-
+	
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < 128; j++) {
 			DriveTable[i][j] = -1;
 		}
 	}
+
 	while (newmovetablenode != NULL) {
-		DriveTable[newmovetablenode->Data.CurrentState - 1][newmovetablenode->Data.Terminal] = newmovetablenode->Data.CurrentState;//current from 0 so we need let current minus 1
+		DriveTable[newmovetablenode->Data.CurrentState][newmovetablenode->Data.Terminal] = newmovetablenode->Data.childnode->Data.CurrentState;//current from 0 so we need let current minus 1
 		newmovetablenode = newmovetablenode->Next;
 	}
-
+	
 	StateNumber = row;
 }
 
@@ -227,12 +284,13 @@ NODE_ID NfaToDfa::GetStartNodeID()
 
 std::set<NODE_ID> NfaToDfa::GetFinalNodeIDs()
 {
-    return std::set<NODE_ID>(FINALSET);
+
+    return FINALSET;
 }
 
 NODE_ID NfaToDfa::GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal)
 {
-    return DriveTable[curNodeID-1][terminal];
+    return DriveTable[curNodeID][terminal];
 }
 
 int NfaToDfa::Match(std::string input)
@@ -244,7 +302,7 @@ int NfaToDfa::Match(std::string input)
 	for (int i = 0; input[i] != '/0'; i++) {
 
 		if (nextstate == -1)
-			return -1;//提前推出
+			return length;//提前推出
 		templength++;
 		nextstate = DriveTable[nextstate][input[i]];
 
@@ -261,11 +319,11 @@ int NfaToDfa::Match(std::string input)
 }
 
 int NfaToDfa::GetDriveTable(NODE_ID curNodeID, TERMINAL terminal) {
-	return DriveTable[curNodeID - 1][terminal];
+	return DriveTable[curNodeID][terminal];
 }
 
 set<NODE_ID> NfaToDfa::GetFinalSet() {
-	return set<NODE_ID>(FINALSET);
+	return FINALSET;
 }
 
 int NfaToDfa::GetStateNumber() {
