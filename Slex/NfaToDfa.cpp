@@ -85,7 +85,7 @@ template <class T>
 bool InkList <T>::Stateoutput() {
 	InkNode <T> *output = Head->Next;
 	while (output != NULL) {
-		cout << output->Data.CurrentState << endl;
+		//cout << output->Data.CurrentState << endl;
 		output = output->Next;
 	}
 }
@@ -94,7 +94,7 @@ template <class T>
 bool InkList <T>::output() {
 	InkNode <T> *output = Head->Next;
 	while (output != NULL) {
-		cout << output->Data << endl;
+		//cout << output->Data << endl;
 		output = output->Next;
 	}
 	return true;
@@ -142,10 +142,8 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
 	InkNode<StateNode> *movestatenode = DFAStateList.getHead()->Next;//use to move to different point,single direct
 
 	while (movestatenode != NULL) {
+		cout << movestatenode->Data.CurrentState;
 		for (int i = 0; i < 128; i++) {
-			movestatenode->Data.state;
-			nfa.GetNextNodeIDs(movestatenode->Data.state, i);
-			nfa.CalculateEpsilonClosure(nfa.GetNextNodeIDs(movestatenode->Data.state, i));
 			set<NODE_ID> newstate = nfa.CalculateEpsilonClosure(nfa.GetNextNodeIDs(movestatenode->Data.state, i));//get a state set,that's maybe a new state
 					/*-------------------Check The StateList----------------------------------*/
 			
@@ -257,7 +255,7 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
 		cout << "当前状态：" << newmovetablenode->Data.CurrentState << "通过" << newmovetablenode->Data.Terminal << "可达" << newmovetablenode->Data.childnode->Data.CurrentState << endl;
 		newmovetablenode = newmovetablenode->Next;
 	}*/
-
+	cout << row;
 	DriveTable = new int*[row];
 	for (int i = 0; i < row; i++) {
 		DriveTable[i] = new int[128];

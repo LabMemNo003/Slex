@@ -276,9 +276,6 @@ std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(std::set<NODE_ID> curNodeIDs
     std::set<NODE_ID> resSet;
     set<NODE_ID>::iterator it;
     for (it = curNodeIDs.begin(); it != curNodeIDs.end(); it++) {
-		if (*it == 8) {
-			cout << endl;
-		}
         std::set<NODE_ID> tmpSet = GetNextNodeIDs(*it,terminal);
         set<NODE_ID>::iterator tmp;
         for (tmp = tmpSet.begin(); tmp != tmpSet.end(); tmp++) {

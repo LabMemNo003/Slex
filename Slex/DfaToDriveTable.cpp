@@ -20,13 +20,14 @@ void DfaToDriveTable::DoIt(NfaToDfa dfa)
 			DriveTable[i][j] = dfa.GetDriveTable(i, j);
 		}
 	}
-
+	/*
 	for (int i = 0; i < dfa.GetStateNumber(); i++) {
 		for (int j = 0; j < 128; j++) {
 			cout << DriveTable[i][j] << " ";
 		}
 		cout << endl;
 	}
+	*/
 	/*-------------------------------Copy FinalSet----------------------------------------------------*/
 
 	FinalSet = dfa.GetFinalSet();

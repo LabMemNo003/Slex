@@ -22,16 +22,14 @@ Re::Re(std::string original_re)
     ReToSuffixFormRe rtsf;
 	std::vector<SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
 #ifdef DEBUG
-	/*
     for (int i = 0; i < suffix_form_re.size(); i++) {
         cout << suffix_form_re[i] << " ";
     }
     cout << endl;
-	*/
 #endif
     
     NFA nfa(suffix_form_re);
-    //nfa.output();
+    nfa.output();
     
     DFA dfa(nfa);/*
 	int **a = new int*[dfa.GetStateNumber()];
