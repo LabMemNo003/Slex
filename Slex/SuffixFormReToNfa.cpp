@@ -66,7 +66,7 @@ Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
                     Node* tmp = g1.list[j];
                     newG.list.push_back(tmp);
                 }
-                for (int j = 0; j < g1.list.size(); j++) {
+                for (int j = 0; j < g2.list.size(); j++) {
                     Node* tmp = g2.list[j];
                     newG.list.push_back(tmp);
                 }
