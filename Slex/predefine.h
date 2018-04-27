@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEBUG
+
 #define SYMBOL              int         //表示任意符号
 #define OPERATOR            int         //表示运算符号
 #define TERMINAL            int         //表示终结符号

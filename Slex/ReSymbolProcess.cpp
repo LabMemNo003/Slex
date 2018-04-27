@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void slash(int &i, string originalRe, std::vector<SYMBOL> &v) {
+void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     int temp;
     char a1, a2, a3;
@@ -119,10 +119,10 @@ void slash(int &i, string originalRe, std::vector<SYMBOL> &v) {
             if ((i + 1 < originalRe.size()) && (originalRe[i + 1] >= '0'&&originalRe[i + 1] <= '7')) {
                 a3 = originalRe[i + 1];
                 i++;
-                v.push_back(64 * (a3 - '0') + 8 * (a2 - '0') + (a1 - '0'));
+                v.push_back(64 * (a1 - '0') + 8 * (a2 - '0') + (a3 - '0'));
             }
             else
-                v.push_back(8 * (a2 - '0') + (a1 - '0'));
+                v.push_back(8 * (a1 - '0') + (a2 - '0'));
         }
         else
             v.push_back(a1 - '0');
@@ -133,7 +133,7 @@ void slash(int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s1(int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s1(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == ')') {
@@ -147,7 +147,7 @@ void s1(int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s2(int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s2(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == '}') {
@@ -158,7 +158,7 @@ void s2(int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s3(int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s3(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     if (originalRe[i] == '^') {
         v.push_back(CARET);
@@ -191,7 +191,7 @@ void s3(int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s4(int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s4(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == '"')
@@ -206,7 +206,7 @@ void s4(int &i, string originalRe, std::vector<SYMBOL> &v) {
 std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
 {
     std::vector<SYMBOL> v;
-    for (int i = 0;i < originalRe.size(); i++) {
+    for (unsigned int i = 0;i < originalRe.size(); i++) {
         if (originalRe[i] == '\\') {
             slash(i, originalRe, v);
         }
