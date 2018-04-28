@@ -165,7 +165,7 @@ Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
 
 NODE_ID SuffixFormReToNfa::GetStartNodeID()
 {
-    cout << "start node ID: " << this->NFAGraph.start->ID << endl;
+    //cout << "start node ID: " << this->NFAGraph.start->ID << endl;
     return this->NFAGraph.start->ID;
 }
 
@@ -203,12 +203,13 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(NODE_ID nodeID)
             }
         }
     }
-    
+    /*
     cout<<"e-CLOSURE of this node: ";
     set<int>::iterator it;
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout<<endl;
+	*/
 
     return resSet;
 }
@@ -233,12 +234,12 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(std::set<NODE_ID> n
                 resSet.insert(*tmpIt);
         }
     }
-    
+    /*
     cout << "e-CLOSURE of this set: ";
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout << endl;
-    
+    */
     return resSet;
 }
 
@@ -281,10 +282,12 @@ std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(std::set<NODE_ID> curNodeIDs
             resSet.insert(*tmp);
         }
     }
+	/*
     cout << "next nodes are: ";
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout << endl;
+	*/
     return resSet;
 }
 
