@@ -14,31 +14,33 @@ Re::Re(std::string original_re)
 {
     ReSymbolProcess rsp;
     std::vector<SYMBOL> processed_re_1 = rsp.DoIt(original_re);
+
     ReOperatorProcess rop;
     std::vector<SYMBOL> processed_re_2 = rop.DoIt(processed_re_1);
+
 #ifdef DEBUG
     rop.display(processed_re_2);
-#endif // DEBUG
+#endif //DEBUG
+
     ReToSuffixFormRe rtsf;
 	std::vector<SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
+
 #ifdef DEBUG
     for (int i = 0; i < suffix_form_re.size(); i++) {
         cout << suffix_form_re[i] << " ";
     }
     cout << endl;
-#endif
+#endif //DEBUG
     
     NFA nfa(suffix_form_re);
+
+#ifdef DEBUG
     nfa.output();
-    
-    DFA dfa(nfa);/*
-	int **a = new int*[dfa.GetStateNumber()];
-	for (int i = 0; i < dfa.GetStateNumber(); i++) {
-		a[i] = new int[128];
-	}
-	*/
-	dt = new DriveTable(dfa);
-    
+#endif //DEBUG
+
+    DFA dfa(nfa);
+	
+    dt = new DriveTable(dfa);
 }
 
 Re::~Re()

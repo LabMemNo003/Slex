@@ -1,8 +1,11 @@
 #include "SuffixFormReToNfa.h"
 
+using namespace std;
+using namespace SuffixFromReToNfa;
+
 SuffixFormReToNfa::SuffixFormReToNfa(std::vector<SYMBOL> suffixFormRe)
 {
-    this->NFAGraph = DoIt(suffixFormRe);
+    DoIt(suffixFormRe);
 }
 
 Graph Graph::createGraph(int id1, int id2, TERMINAL t) {
@@ -35,7 +38,7 @@ Graph Graph::createGraph(int id1, int id2, TERMINAL t) {
     return newG;
 }
 
-Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
+void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
 {
     std::stack<Graph> NFAStack;
     int i = 0;
@@ -160,7 +163,7 @@ Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
         //cout << k << " ";
         this->NFAGraph.list[k]->ID = k;
     }
-    return finalGraph;
+    this->NFAGraph = finalGraph;
 }
 
 NODE_ID SuffixFormReToNfa::GetStartNodeID()
@@ -298,4 +301,21 @@ int SuffixFormReToNfa::Match(std::string input)
 
 void SuffixFormReToNfa::OptimizeNfa()
 {
+}
+
+void SuffixFormReToNfa::output()
+{
+    for (int i = 0; i < this->NFAGraph.list.size(); i++) {
+        Node* p = this->NFAGraph.list[i];
+        cout << "ID: " << p->ID << endl;
+        if (p->links.size() == 0) {
+            cout << "empty list of Node No." << p->ID << endl;
+        }
+        else {
+            for (int j = 0; j < p->links.size(); j++) {
+                cout << " links: " << p->links[j]->terminal << ": " << p->links[j]->next->ID << endl;
+            }
+        }
+        cout << endl;
+    }
 }

@@ -1,12 +1,16 @@
 #include "ReToSuffixFormRe.h"
+
 #include<iostream>
+
 using namespace std;
+
 bool ReToSuffixFormRe::isOperator(SYMBOL ch) {
     if (ch == OPEN_PAREN || ch == CLOSE_PAREN || ch == KLEENE_CLOSURE || ch == CANCATENATION || ch == UNION)
         return true;
     else
         return false;
 }
+
 int ReToSuffixFormRe::getPriority(OPERATOR op, int flag) {
     if (op == KLEENE_CLOSURE) {
         if (!flag)  //out of stack
@@ -39,6 +43,7 @@ int ReToSuffixFormRe::getPriority(OPERATOR op, int flag) {
             return 8;
     }
 }
+
 std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) {
     std::stack<SYMBOL> s;
     std::vector<SYMBOL> suffixRe;
@@ -95,6 +100,7 @@ std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) 
     
     return suffixRe;
 }
+
 std::vector<SYMBOL> ReToSuffixFormRe::DoIt(std::vector<SYMBOL> processedRe)
 {
     std::vector<SYMBOL> suffixRe = toSuffix(processedRe);
