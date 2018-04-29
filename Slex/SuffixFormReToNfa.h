@@ -5,42 +5,15 @@
 
 #include<set>
 #include<string>
-#include <map>
-#include <iostream>
 
 //============================== PHASE 4 ==============================
-
-namespace SuffixFromReToNfa {
-    class Link;
-    class Node {
-    public:
-        NODE_ID ID;
-        std::vector<Link*> links;
-        void setId(NODE_ID id) { this->ID = id; }
-    };
-
-    class Link {
-    public:
-        TERMINAL terminal;
-        Node* next;
-    };
-
-    class Graph {
-    public:
-        Node* start;
-        Node* end;
-        std::vector<Node*> list;
-        Graph() {  };
-        Graph createGraph(int id1, int id2, TERMINAL t);
-    };
-};
 
 typedef class SuffixFormReToNfa {
 public:
     SuffixFormReToNfa(std::vector<SYMBOL> suffixFormRe);
     
     // You need to implement these methods.
-    void DoIt(std::vector<SYMBOL> suffixFormRe) ;
+    void DoIt(std::vector<SYMBOL> suffixFormRe);
     NODE_ID GetStartNodeID();
     NODE_ID GetFinalNodeID();
     std::set<NODE_ID> CalculateEpsilonClosure(NODE_ID nodeID);
@@ -52,10 +25,32 @@ public:
     // Optional
     void OptimizeNfa();
 
-    void output();
-    SuffixFromReToNfa::Node* locateNode(NODE_ID nodeID);
-
 private:
-    SuffixFromReToNfa::Graph NFAGraph;
+    struct Link;
+    struct Node {
+        NODE_ID ID;
+        std::vector<Link*> fromLinks;
+        std::vector<Link*> nextLinks;
+    };
+    struct Link {
+        TERMINAL terminal;
+        Node* fromNode;
+        Node* nextNode;
+    };
+    struct Graph {
+        Node* startNode;
+        Node* endNode;
+        std::vector<Node*> nodeList;
+        std::vector<Link*> linkList;
+    };
+
+    Graph *createGraph(TERMINAL t);
+    Graph *unionGraph(Graph *pg1, Graph *pg2);
+    Graph *concatenateGraph(Graph *pg1, Graph *pg2);
+    Graph *kleeneClosure(Graph *pg);
+    void deleteGraph(Graph *pg);
+    void setGraphID(Graph *pg);
+
+    Graph *pNfaGraph;
 
 }NFA;

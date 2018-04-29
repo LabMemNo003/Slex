@@ -11,7 +11,7 @@
 #define OPEN_PAREN          301         //左圆括号      (
 #define CLOSE_PAREN         302         //右圆括号      )
 #define KLEENE_CLOSURE      303         //克林闭包      *
-#define CANCATENATION       304         //连接运算      \c
+#define CONCATENATION       304         //连接运算      \c
 #define UNION               305         //或运算        |
 
 #define OPEN_CURLY          400         //左花括号      {

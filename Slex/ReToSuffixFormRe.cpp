@@ -5,7 +5,7 @@
 using namespace std;
 
 bool ReToSuffixFormRe::isOperator(SYMBOL ch) {
-    if (ch == OPEN_PAREN || ch == CLOSE_PAREN || ch == KLEENE_CLOSURE || ch == CANCATENATION || ch == UNION)
+    if (ch == OPEN_PAREN || ch == CLOSE_PAREN || ch == KLEENE_CLOSURE || ch == CONCATENATION || ch == UNION)
         return true;
     else
         return false;
@@ -18,7 +18,7 @@ int ReToSuffixFormRe::getPriority(OPERATOR op, int flag) {
         else 
             return 6;
     }
-    else if (op == CANCATENATION) {
+    else if (op == CONCATENATION) {
         if (!flag)
             return 5;
         else

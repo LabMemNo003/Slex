@@ -93,7 +93,7 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
         }
         if (v_temp.size() != 0) {
             if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-                v_temp.push_back(CANCATENATION);
+                v_temp.push_back(CONCATENATION);
             }
         }
         v_temp.push_back(OPEN_PAREN);
@@ -153,7 +153,7 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
         }
         if (v_temp.size() != 0) {
             if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-                v_temp.push_back(CANCATENATION);
+                v_temp.push_back(CONCATENATION);
             }
         }
         v_temp.push_back(OPEN_PAREN);
@@ -187,7 +187,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
         if (processedRe[i] == CLOSE_CURLY) {
             for (int j = 0;j < t1 - 1;j++) {
                 //v_temp.push_back(c);
-                v_temp.push_back(CANCATENATION);
+                v_temp.push_back(CONCATENATION);
                 v_temp.push_back(c);
             }
         }
@@ -197,7 +197,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                 for (int j = 0;j < t1;j++) {
                     //v_temp.push_back(c);
                     if (j != 0) v_temp.push_back(c);
-                    v_temp.push_back(CANCATENATION);
+                    v_temp.push_back(CONCATENATION);
                 }
                 v_temp.push_back(c);
                 v_temp.push_back(KLEENE_CLOSURE);
@@ -217,7 +217,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     if (t2 == t1) {
                         for (int j = 0;j < t1 - 1;j++) {
                             //v_temp.push_back(c);
-                            v_temp.push_back(CANCATENATION);
+                            v_temp.push_back(CONCATENATION);
                             v_temp.push_back(c);
                         }
                     }
@@ -225,7 +225,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                         for (int j = 0;j < t1;j++) {
                             //v_temp.push_back(c);
                             if (j != 0) v_temp.push_back(c);
-                            v_temp.push_back(CANCATENATION);
+                            v_temp.push_back(CONCATENATION);
                         }
                         v_temp.push_back(OPEN_PAREN);
                         v_temp.push_back(EPSILON);
@@ -233,7 +233,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                             v_temp.push_back(UNION);
                             for (int j1 = 0;j1 <= j;j1++) {
                                 v_temp.push_back(c);
-                                if (j1 != j) v_temp.push_back(CANCATENATION);
+                                if (j1 != j) v_temp.push_back(CONCATENATION);
                             }
                         }
                         v_temp.push_back(CLOSE_PAREN);
@@ -263,7 +263,7 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
 void period(std::vector<SYMBOL> &v_temp) {
     if (v_temp.size() != 0) {
         if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-            v_temp.push_back(CANCATENATION);
+            v_temp.push_back(CONCATENATION);
         }
     }
     v_temp.push_back(OPEN_PAREN);
@@ -299,7 +299,7 @@ void quest(std::vector<SYMBOL> &v_temp) {
 
 void positive(std::vector<SYMBOL> &v_temp) {
     int s = v_temp.size();
-    v_temp.push_back(CANCATENATION);
+    v_temp.push_back(CONCATENATION);
     for (int i = 0;i < s;i++)
         v_temp.push_back(v_temp[i]);
 
@@ -317,7 +317,7 @@ void close_p(std::vector<SYMBOL> &v_temp_all, std::vector<SYMBOL> &v_temp_out) {
     v_temp_all.push_back(CLOSE_PAREN);
     if (v_temp_out.size() != 0) {
         if (v_temp_out[v_temp_out.size() - 1] != OPEN_PAREN&&v_temp_out[v_temp_out.size() - 1] != UNION)
-            v_temp_out.push_back(CANCATENATION);
+            v_temp_out.push_back(CONCATENATION);
     }
     for (int i = 0;i < int(v_temp_all.size());i++)
         v_temp_out.push_back(v_temp_all[i]);
@@ -327,7 +327,7 @@ void temp_to_all(std::vector<SYMBOL> &v_temp, std::vector<SYMBOL> &v_temp_all) {
     if (v_temp_all.size() != 0) {
         if(v_temp[0]!= UNION)
             if (v_temp_all[v_temp_all.size() - 1] != OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != UNION) {
-                v_temp_all.push_back(CANCATENATION);
+                v_temp_all.push_back(CONCATENATION);
             }
     }
     for (int i = 0;i < int(v_temp.size());i++)
