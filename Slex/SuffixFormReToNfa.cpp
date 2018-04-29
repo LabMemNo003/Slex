@@ -1,8 +1,11 @@
 #include "SuffixFormReToNfa.h"
 
+using namespace std;
+using namespace SuffixFromReToNfa;
+
 SuffixFormReToNfa::SuffixFormReToNfa(std::vector<SYMBOL> suffixFormRe)
 {
-    this->NFAGraph = DoIt(suffixFormRe);
+    DoIt(suffixFormRe);
 }
 
 Graph Graph::createGraph(int id1, int id2, TERMINAL t) {
@@ -35,7 +38,7 @@ Graph Graph::createGraph(int id1, int id2, TERMINAL t) {
     return newG;
 }
 
-Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
+void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
 {
     std::stack<Graph> NFAStack;
     int i = 0;
@@ -211,12 +214,12 @@ Graph SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
         //cout << k << " ";
         this->NFAGraph.list[k]->ID = k;
     }
-    return finalGraph;
+    this->NFAGraph = finalGraph;
 }
 
 NODE_ID SuffixFormReToNfa::GetStartNodeID()
 {
-    cout << "start node ID: " << this->NFAGraph.start->ID << endl;
+    //cout << "start node ID: " << this->NFAGraph.start->ID << endl;
     return this->NFAGraph.start->ID;
 }
 
@@ -254,12 +257,13 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(NODE_ID nodeID)
             }
         }
     }
-    
+    /*
     cout<<"e-CLOSURE of this node: ";
     set<int>::iterator it;
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout<<endl;
+	*/
 
     return resSet;
 }
@@ -284,12 +288,12 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(std::set<NODE_ID> n
                 resSet.insert(*tmpIt);
         }
     }
-    
+    /*
     cout << "e-CLOSURE of this set: ";
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout << endl;
-    
+    */
     return resSet;
 }
 
@@ -332,10 +336,12 @@ std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(std::set<NODE_ID> curNodeIDs
             resSet.insert(*tmp);
         }
     }
+	/*
     cout << "next nodes are: ";
     for (it = resSet.begin(); it != resSet.end(); it++)
         cout << (*it) << " ";
     cout << endl;
+	*/
     return resSet;
 }
 
@@ -346,4 +352,21 @@ int SuffixFormReToNfa::Match(std::string input)
 
 void SuffixFormReToNfa::OptimizeNfa()
 {
+}
+
+void SuffixFormReToNfa::output()
+{
+    for (int i = 0; i < this->NFAGraph.list.size(); i++) {
+        Node* p = this->NFAGraph.list[i];
+        cout << "ID: " << p->ID << endl;
+        if (p->links.size() == 0) {
+            cout << "empty list of Node No." << p->ID << endl;
+        }
+        else {
+            for (int j = 0; j < p->links.size(); j++) {
+                cout << " links: " << p->links[j]->terminal << ": " << p->links[j]->next->ID << endl;
+            }
+        }
+        cout << endl;
+    }
 }
