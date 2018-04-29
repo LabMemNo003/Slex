@@ -1,6 +1,7 @@
 #include "SuffixFormReToNfa.h"
 
 #include<queue>
+#include<iostream>
 
 using namespace std;
 
@@ -162,6 +163,23 @@ int SuffixFormReToNfa::Match(std::string input)
 
 void SuffixFormReToNfa::OptimizeNfa()
 {
+}
+
+void SuffixFormReToNfa::output()
+{
+    for (vector<Node*>::iterator ite = pNfaGraph->nodeList.begin();
+        ite != pNfaGraph->nodeList.end(); ite++)
+    {
+        cout << "ID: " << (*ite)->ID << endl;
+        for (vector<Link*>::iterator it = (*ite)->nextLinks.begin();
+            it != (*ite)->nextLinks.end(); it++)
+        {
+            cout << "Links: " << (*it)->terminal << " --> " << (*it)->nextNode->ID << endl;
+        }
+        cout << endl;
+    }
+    cout << "StartID: " << pNfaGraph->startNode->ID << endl;
+    cout << "EndID: " << pNfaGraph->endNode->ID << endl;
 }
 
 SuffixFormReToNfa::Graph *SuffixFormReToNfa::createGraph(TERMINAL t)

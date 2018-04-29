@@ -25,6 +25,8 @@ public:
     // Optional
     void OptimizeNfa();
 
+    void output();
+
 private:
     struct Link;
     struct Node {

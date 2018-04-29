@@ -33,7 +33,7 @@ Re::Re(std::string original_re)
 #endif //DEBUG
     
     NFA nfa(suffix_form_re);
-
+#define DEBUG
 #ifdef DEBUG
     nfa.output();
 #endif //DEBUG
