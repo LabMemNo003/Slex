@@ -73,8 +73,52 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
                     Node* tmp = g2.list[j];
                     newG.list.push_back(tmp);
                 }
+                id1 += 2;
+                id2 += 2;
             }
             else {          //UNION
+                Node *newStart = new Node;
+                Node* newEnd = new Node;
+                newStart->ID = g1.start->ID;
+                newEnd->ID = g2.start->ID;
+                newG.start = newStart;
+                newG.end = newEnd;
+                Link* l1 = new Link;
+                Link* l2 = new Link;
+                
+                l1->terminal = EPSILON;
+                l2->terminal = EPSILON;
+                l1->next = newEnd;
+                l2->next = newEnd;
+                g1.end->links.push_back(l1);
+                g2.end->links.push_back(l2);
+                int i;
+                for (i = 0; i < g1.start->links.size(); i++) {  //g1
+                    newStart->links.push_back(g1.start->links[i]);
+                }
+                for (i = 0; i < g2.start->links.size(); i++) {  //g2
+                    newStart->links.push_back(g2.start->links[i]);
+                }
+                
+                for (i = 0; i < g1.list.size(); i++) {
+                    Node* tmp = g1.list[i];
+                    if (g1.list[i]->ID == g1.start->ID)
+                        continue;
+                    else
+                        newG.list.push_back(tmp);
+                }
+                for (i = 0; i < g2.list.size(); i++) {
+                    Node* tmp = g2.list[i];
+                    if (g2.list[i]->ID == g2.start->ID)
+                        continue;
+                    else
+                        newG.list.push_back(tmp);
+                }
+                
+                newG.list.push_back(newStart);
+                newG.list.push_back(newEnd);
+
+                /*
                 //Graph newG;
                 Node *newStart = new Node;
                 Node* newEnd=new Node;
@@ -88,8 +132,8 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
                 Link* l4 = new Link;
                 l1->terminal = EPSILON; l2->terminal = EPSILON; 
                 l3->terminal = EPSILON; l4->terminal = EPSILON;
-                l1->next = g1.start;
-                l2->next = g2.start;
+                l1->next = newEnd;
+                l2->next = newEnd;
                 l3->next = newEnd;
                 l4->next = newEnd;
                 newStart->links.push_back(l1);
@@ -100,6 +144,7 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
                 q->links.push_back(l4);
 
                 for (int j = 0; j < g1.list.size(); j++) {
+                    //newStart->links.push_back(g1.start->links[j]);
                     Node* tmp = g1.list[j];
                     newG.list.push_back(tmp);
                 }
@@ -109,6 +154,7 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
                 }
                 newG.list.push_back(newStart);
                 newG.list.push_back(newEnd);
+                */
             }
             NFAStack.push(newG);
         }
@@ -147,14 +193,19 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
             newG.list.push_back(newEnd);
 
             NFAStack.push(newG);
+
+            id1 += 2;
+            id2 += 2;
         }
         else{  //terminal
             //ÖÆÍ¼ NFA
             Graph g = g.createGraph(id1, id2, cur);
             NFAStack.push(g);
+
+            id1 += 2;
+            id2 += 2;
         }
-        id1 += 2;
-        id2 += 2;
+        
         i++;
     }
     Graph finalGraph = NFAStack.top();
