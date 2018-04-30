@@ -1,5 +1,7 @@
 #include "DfaToDriveTable.h"
 
+using namespace std;
+
 DfaToDriveTable::DfaToDriveTable(DFA dfa)
 {
     DoIt(dfa);

@@ -167,6 +167,7 @@ void SuffixFormReToNfa::OptimizeNfa()
 
 void SuffixFormReToNfa::output()
 {
+    cout << "==========NFA==========" << endl;
     for (vector<Node*>::iterator ite = pNfaGraph->nodeList.begin();
         ite != pNfaGraph->nodeList.end(); ite++)
     {
@@ -180,6 +181,8 @@ void SuffixFormReToNfa::output()
     }
     cout << "StartID: " << pNfaGraph->startNode->ID << endl;
     cout << "EndID: " << pNfaGraph->endNode->ID << endl;
+    cout << "==========END==========" << endl;
+    cout << endl;
 }
 
 SuffixFormReToNfa::Graph *SuffixFormReToNfa::createGraph(TERMINAL t)

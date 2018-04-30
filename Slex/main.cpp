@@ -8,12 +8,16 @@ using namespace std;
 //============================== T E S T ==============================
 
 int main() {
+    //string original_re = "[0-9]{1,2}";
+    
+    //string original_re = "([0-9][0-9])*";
+    
     //string original_re = "1";
     //string original_re = "12";
-    string original_re = "([12][34])*";
+    //string original_re = "([12][34])*";
     //string original_re = "0|[1-9][0-9]*"; // 0|(1|2|3|4|5|6|7|8|9)_((0|1|2|3|4|5|6|7|8|9)*)
     //string original_re = "0[1-7][0-7]*"; // 0_(1|2|3|4|5|6|7)_((0|1|2|3|4|5|6|7)*)
-    //string original_re = "((0x[^0-9a-f]+)*)?+"; // 0_x_((0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f)_(0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f)*)
+    string original_re = "((0x[^0-9a-f]+)*)?+"; // 0_x_((0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f)_(0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f)*)
 	//string original_re = "([^0-9])";
 
     //string original_re = "[^\\0-\\57\\72-\\177]"; //(0|1|2|3|4|5|6|7|8|9)
@@ -25,7 +29,7 @@ int main() {
 
     Re re(original_re);
     
-    string input = "111122334";
+    string input = "111122334.";
 
     int matched_length = re.Match(input);
 

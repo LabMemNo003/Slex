@@ -9,6 +9,7 @@
 #include"DfaToDriveTable.h"
 
 #include<vector>
+#include<iostream>
 
 Re::Re(std::string original_re)
 {
@@ -27,19 +28,23 @@ Re::Re(std::string original_re)
 
 #ifdef DEBUG
     for (int i = 0; i < suffix_form_re.size(); i++) {
-        cout << suffix_form_re[i] << " ";
+        std::cout << suffix_form_re[i] << " ";
     }
-    cout << endl;
+    std::cout << std::endl;
 #endif //DEBUG
     
     NFA nfa(suffix_form_re);
-#define DEBUG
+
 #ifdef DEBUG
     nfa.output();
 #endif //DEBUG
 
     DFA dfa(nfa);
-	
+
+#ifdef DEBUG
+    dfa.output();
+#endif //DEBUG
+
     dt = new DriveTable(dfa);
 }
 
