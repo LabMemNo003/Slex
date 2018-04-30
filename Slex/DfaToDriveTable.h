@@ -20,5 +20,9 @@ public:
     int Match(std::string input);
 
 private:
+    int stateCnt;
+    NODE_ID **dt;
+    NODE_ID startNode;
+    bool *isEndNode;
 
 }DriveTable;

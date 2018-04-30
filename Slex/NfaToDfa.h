@@ -24,6 +24,7 @@ public:
     void OptimizeDfa();
 
     void output();
+    int stateCnt();
 
 private:
     struct DtLine {
@@ -34,6 +35,7 @@ private:
 
     std::vector<DtLine> dt;
     std::vector<std::set<NODE_ID>> nodes;
+    NODE_ID startNode;
     std::set<NODE_ID> endNodes;
 
 }DFA;

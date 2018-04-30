@@ -63,6 +63,8 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
         ind++;
     }
 
+    startNode = 1;
+
     NODE_ID finalNode = nfa.GetFinalNodeID();
     for (int i = 0; i < nodes.size(); i++) {
         if (nodes[i].find(finalNode) != nodes[i].end()) {
@@ -73,7 +75,7 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
 
 NODE_ID NfaToDfa::GetStartNodeID()
 {
-    return 1;
+    return startNode;
 }
 
 std::set<NODE_ID> NfaToDfa::GetFinalNodeIDs()
@@ -120,5 +122,10 @@ void NfaToDfa::output()
     cout << endl;
     cout << "**********END**********" << endl;
     cout << endl;
+}
+
+int NfaToDfa::stateCnt()
+{
+    return int(nodes.size());
 }
 
