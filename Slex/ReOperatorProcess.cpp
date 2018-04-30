@@ -41,7 +41,7 @@ bool isnum(int a) {
 bool is_ext(int &i, std::vector<SYMBOL> &processedRe) {
     if (i + 1 < int(processedRe.size())) {
         int c = processedRe[i + 1];
-        if (c == KLEENE_CLOSURE || c == POSITIVE_CLOSURE || c == QUESTION)
+        if (c == KLEENE_CLOSURE || c == POSITIVE_CLOSURE || c == QUESTION || c == OPEN_CURLY)
             return true;
         else
             return false;
@@ -170,7 +170,7 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
 }
 
 void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_temp) {
-    int c = processedRe[i - 1];
+    int length = v_temp.size();
     i++;
     if (isnum(processedRe[i])) {
         std::stack<int> s;
@@ -186,20 +186,22 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
         }
         if (processedRe[i] == CLOSE_CURLY) {
             for (int j = 0;j < t1 - 1;j++) {
-                //v_temp.push_back(c);
                 v_temp.push_back(CONCATENATION);
-                v_temp.push_back(c);
+                for (int z = 0;z < length;z++)
+                    v_temp.push_back(v_temp[z]);
             }
         }
         else if (processedRe[i] == int(',')) {
             i++;
             if (processedRe[i] == CLOSE_CURLY) {
                 for (int j = 0;j < t1;j++) {
-                    //v_temp.push_back(c);
-                    if (j != 0) v_temp.push_back(c);
+                    if (j != 0)
+                        for (int z = 0;z < length;z++)
+                            v_temp.push_back(v_temp[z]);
                     v_temp.push_back(CONCATENATION);
                 }
-                v_temp.push_back(c);
+                for (int z = 0;z < length;z++)
+                    v_temp.push_back(v_temp[z]);
                 v_temp.push_back(KLEENE_CLOSURE);
             }
             else {
@@ -216,15 +218,16 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                 if (processedRe[i] == CLOSE_CURLY) {
                     if (t2 == t1) {
                         for (int j = 0;j < t1 - 1;j++) {
-                            //v_temp.push_back(c);
                             v_temp.push_back(CONCATENATION);
-                            v_temp.push_back(c);
+                            for (int z = 0;z < length;z++)
+                                v_temp.push_back(v_temp[z]);
                         }
                     }
                     else if (t2 > t1) {
                         for (int j = 0;j < t1;j++) {
-                            //v_temp.push_back(c);
-                            if (j != 0) v_temp.push_back(c);
+                            if (j != 0)
+                                for (int z = 0;z < length;z++)
+                                    v_temp.push_back(v_temp[z]);
                             v_temp.push_back(CONCATENATION);
                         }
                         v_temp.push_back(OPEN_PAREN);
@@ -232,7 +235,8 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                         for (int j = 0;j < t2 - t1;j++) {
                             v_temp.push_back(UNION);
                             for (int j1 = 0;j1 <= j;j1++) {
-                                v_temp.push_back(c);
+                                for (int z = 0;z < length;z++)
+                                    v_temp.push_back(v_temp[z]);
                                 if (j1 != j) v_temp.push_back(CONCATENATION);
                             }
                         }
@@ -353,8 +357,10 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == OPEN_CURLY) {
@@ -365,8 +371,10 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == PERIOD) {
@@ -377,8 +385,10 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == OPEN_PAREN) {
@@ -389,8 +399,10 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else {
@@ -401,8 +413,10 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         temp_to_all(v_temp, v_temp_all);
@@ -423,8 +437,10 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == OPEN_CURLY) {
@@ -435,8 +451,10 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == PERIOD) {
@@ -447,8 +465,10 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else if (c == OPEN_PAREN) {
@@ -459,8 +479,10 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         else {
@@ -471,8 +493,10 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
                     quest(v_temp);
                 else if (processedRe[i] == POSITIVE_CLOSURE)
                     positive(v_temp);
-                else
+                else if (processedRe[i] == KLEENE_CLOSURE)
                     kleene(v_temp);
+                else
+                    open_c(i, processedRe, v_temp);
             }
         }
         temp_to_all(v_temp, v);
