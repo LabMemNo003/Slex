@@ -221,9 +221,6 @@ std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
             case '.':
                 v.push_back(PERIOD);
                 break;
-            case '-':
-                v.push_back(HYPHEN);
-                break;
             case '^':
                 v.push_back(CARET);
                 break;
