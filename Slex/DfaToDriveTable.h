@@ -19,6 +19,8 @@ public:
     NODE_ID GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal);
     int Match(std::string input);
 
+    void output();
+
 private:
     int stateCnt;
     NODE_ID **dt;

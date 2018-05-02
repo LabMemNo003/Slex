@@ -56,6 +56,11 @@ void Re::DoIt(std::string original_re)
 #endif //DEBUG
 
     dt = new DriveTable(dfa);
+
+#ifdef DEBUG
+    dt->output();
+#endif // DEBUG
+
 }
 
 int Re::Match(std::string input)

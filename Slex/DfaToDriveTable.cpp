@@ -1,5 +1,7 @@
 #include "DfaToDriveTable.h"
 
+#include<iostream>
+
 using namespace std;
 
 DfaToDriveTable::DfaToDriveTable(DFA dfa)
@@ -70,4 +72,31 @@ int DfaToDriveTable::Match(std::string input)
     }
     
     return res;
+}
+
+void DfaToDriveTable::output()
+{
+    cout << "++++++++++DFA++++++++++" << endl;
+    for (int i = 0; i < stateCnt; i++)
+    {
+        cout << "ID: " << i << endl;
+        for (int j = 0; j < 128; j++)
+        {
+            if (dt[i][j])
+            {
+                cout << "Links: " << j << " --> " << dt[i][j] << endl;
+            }
+        }
+        cout << endl;
+    }
+    cout << "StartID: " << 1 << endl;
+    cout << "EndID:";
+    for (int i = 0; i < stateCnt; i++)
+    {
+        if (isEndNode[i] == true)
+            cout << " " << i;
+    }
+    cout << endl;
+    cout << "++++++++++END++++++++++" << endl;
+    cout << endl;
 }
