@@ -9,53 +9,28 @@ using namespace std;
 //============================== T E S T ==============================
 
 int main() {
-    string PLUS = "\\+";
-    string MINUS = "\\-";
-    string MULTIPY = "\\*";
-    string DIVIDE = "/";
-    string GREATER = ">";
-    string LESS = "<";
-    string ASSIGN = "=";
-    string L_PAREN = "\\(";
-    string R_PAREN = "\\)";
-    string SEMICOLON = ";";
-
-    string KEY_IF = "if";
-    string KEY_THEN = "then";
-    string KEY_ELSE = "else";
-    string KEY_WHILE = "while";
-    string KEY_DO = "do";
-
-    string IDN = "[a-zA-Z][a-zA-Z0-9]*";
-    string INT10 = "0|[1-9][0-9]*";
-    string INT8 = "0[0-7]+";
-    string INT16 = "0x[0-9a-fA-F]+";
-
-    string SPACE = "\\ \\n\\f\\r\\t\\v";
-    string ERROR = ".";
-
     string patterns[21];
-    patterns[0] = PLUS;
-    patterns[1] = MINUS;
-    patterns[2] = MULTIPY;
-    patterns[3] = DIVIDE;
-    patterns[4] = GREATER;
-    patterns[5] = LESS;
-    patterns[6] = ASSIGN;
-    patterns[7] = L_PAREN;
-    patterns[8] = R_PAREN;
-    patterns[9] = SEMICOLON;
-    patterns[10] = KEY_IF;
-    patterns[11] = KEY_THEN;
-    patterns[12] = KEY_ELSE;
-    patterns[13] = KEY_WHILE;
-    patterns[14] = KEY_DO;
-    patterns[15] = IDN;
-    patterns[16] = INT10;
-    patterns[17] = INT8;
-    patterns[18] = INT16;
-    patterns[19] = SPACE;
-    patterns[20] = ERROR;
+    patterns[0] = "\\+";
+    patterns[1] = "\\-";
+    patterns[2] = "\\*";
+    patterns[3] = "/";
+    patterns[4] = ">";
+    patterns[5] = "<";
+    patterns[6] = "=";
+    patterns[7] = "\\(";
+    patterns[8] = "\\)";
+    patterns[9] = ";";
+    patterns[10] = "if";
+    patterns[11] = "then";
+    patterns[12] = "else";
+    patterns[13] = "while";
+    patterns[14] = "do";
+    patterns[15] = "[a-zA-Z][a-zA-Z0-9]*";
+    patterns[16] = "0|[1-9][0-9]*";
+    patterns[17] = "0[0-7]+";
+    patterns[18] = "0x[0-9a-fA-F]+";
+    patterns[19] = "[\\ \\n\\f\\r\\t\\v]";
+    patterns[20] = ".";
 
     Re automas[21];
     for (int i = 0; i < 21; i++) {
@@ -88,7 +63,11 @@ int main() {
 
 
     string input = "0  92+data>  0x3f  00  while";
+    cout << "Input string is:" << endl << endl << input << endl;
 
+    cout << endl;
+
+    cout << "The result is:" << endl << endl;
     int ind = 0;
     int len = input.length();
     while (ind < len) {
@@ -104,6 +83,7 @@ int main() {
         actions[max_pattern](input.substr(ind, max_match));
         ind = ind + max_match;
     }
+    cout << endl;
 
     system("pause");
 
