@@ -21,9 +21,9 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
         int cur = suffixFormRe.at(i);
 
         if (cur == CONCATENATION) {
-            pg1 = NfaStack.top();
-            NfaStack.pop();
             pg2 = NfaStack.top();
+            NfaStack.pop();
+            pg1 = NfaStack.top();
             NfaStack.pop();
             
             pg = concatenateGraph(pg1, pg2);
