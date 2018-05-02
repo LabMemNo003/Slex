@@ -11,7 +11,17 @@
 #include<vector>
 #include<iostream>
 
+Re::Re()
+{
+    dt = NULL;
+}
+
 Re::Re(std::string original_re)
+{
+    DoIt(original_re);
+}
+
+void Re::DoIt(std::string original_re)
 {
     ReSymbolProcess rsp;
     std::vector<SYMBOL> processed_re_1 = rsp.DoIt(original_re);
@@ -46,11 +56,6 @@ Re::Re(std::string original_re)
 #endif //DEBUG
 
     dt = new DriveTable(dfa);
-}
-
-Re::~Re()
-{
-    delete dt;
 }
 
 int Re::Match(std::string input)

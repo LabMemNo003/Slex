@@ -6,8 +6,9 @@
 
 class Re {
 public:
+    Re();
     Re(std::string original_re);
-    ~Re();
+    void DoIt(std::string original_re);
     int Match(std::string input);
 
 private:
