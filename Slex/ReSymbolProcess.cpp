@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
+void slash(unsigned int &i, string originalRe, std::vector<YY_SYMBOL> &v) {
     i++;
     int temp;
     char a1, a2, a3;
@@ -52,7 +52,7 @@ void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
         v.push_back(int('"'));
         break;
     case 'e':
-        v.push_back(EPSILON);
+        v.push_back(YY_EPSILON);
         break;
     case 'a':
         v.push_back(7);
@@ -133,21 +133,21 @@ void slash(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s2(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s2(unsigned int &i, string originalRe, std::vector<YY_SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == '}') {
-            v.push_back(CLOSE_CURLY);
+            v.push_back(YY_CLOSE_CURLY);
             return;
         }
         v.push_back(int(originalRe[i]));
     }
 }
 
-void s3(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s3(unsigned int &i, string originalRe, std::vector<YY_SYMBOL> &v) {
     i++;
     if (originalRe[i] == '^') {
-        v.push_back(CARET);
+        v.push_back(YY_CARET);
         i++;
         if (originalRe[i] == '-') {
             v.push_back(int('-'));
@@ -162,12 +162,12 @@ void s3(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
 
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == ']') {
-            v.push_back(CLOSE_BRACKET);
+            v.push_back(YY_CLOSE_BRACKET);
             return;
         }
         else if (originalRe[i] == '-')
-            if (originalRe[i + 1] != CLOSE_BRACKET)
-                v.push_back(HYPHEN);
+            if (originalRe[i + 1] != YY_CLOSE_BRACKET)
+                v.push_back(YY_HYPHEN);
             else
                 v.push_back(int('-'));
         else if (originalRe[i] == '\\')
@@ -177,7 +177,7 @@ void s3(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-void s4(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
+void s4(unsigned int &i, string originalRe, std::vector<YY_SYMBOL> &v) {
     i++;
     for (;i < originalRe.size();i++) {
         if (originalRe[i] == '"')
@@ -189,9 +189,9 @@ void s4(unsigned int &i, string originalRe, std::vector<SYMBOL> &v) {
     }
 }
 
-std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
+std::vector<YY_SYMBOL> YY_ReSymbolProcess::DoIt(std::string originalRe)
 {
-    std::vector<SYMBOL> v;
+    std::vector<YY_SYMBOL> v;
     for (unsigned int i = 0;i < originalRe.size(); i++) {
         if (originalRe[i] == '\\') {
             slash(i, originalRe, v);
@@ -199,36 +199,36 @@ std::vector<SYMBOL> ReSymbolProcess::DoIt(std::string originalRe)
         else {
             switch (originalRe[i]) {
             case '(':
-                v.push_back(OPEN_PAREN);
+                v.push_back(YY_OPEN_PAREN);
                 break;
             case ')':
-                v.push_back(CLOSE_PAREN);
+                v.push_back(YY_CLOSE_PAREN);
                 break;
             case '*':
-                v.push_back(KLEENE_CLOSURE);
+                v.push_back(YY_KLEENE_CLOSURE);
                 break;
             case '|':
-                v.push_back(UNION);
+                v.push_back(YY_UNION);
                 break;
             case '{':
-                v.push_back(OPEN_CURLY);
+                v.push_back(YY_OPEN_CURLY);
                 s2(i, originalRe, v);
                 break;
             case '[':
-                v.push_back(OPEN_BRACKET);
+                v.push_back(YY_OPEN_BRACKET);
                 s3(i, originalRe, v);
                 break;
             case '.':
-                v.push_back(PERIOD);
+                v.push_back(YY_PERIOD);
                 break;
             case '^':
-                v.push_back(CARET);
+                v.push_back(YY_CARET);
                 break;
             case '+':
-                v.push_back(POSITIVE_CLOSURE);
+                v.push_back(YY_POSITIVE_CLOSURE);
                 break;
             case '?':
-                v.push_back(QUESTION);
+                v.push_back(YY_QUESTION);
                 break;
             case '"':
                 s4(i, originalRe, v);

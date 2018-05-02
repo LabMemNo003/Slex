@@ -6,12 +6,12 @@
 using namespace std;
 
 
-SuffixFormReToNfa::SuffixFormReToNfa(std::vector<SYMBOL> suffixFormRe)
+YY_SuffixFormReToNfa::YY_SuffixFormReToNfa(std::vector<YY_SYMBOL> suffixFormRe)
 {
     DoIt(suffixFormRe);
 }
 
-void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
+void YY_SuffixFormReToNfa::DoIt(std::vector<YY_SYMBOL> suffixFormRe)
 {
     std::stack<Graph*> NfaStack;
     Graph *pg, *pg1, *pg2;
@@ -20,7 +20,7 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
     while (i < size) {
         int cur = suffixFormRe.at(i);
 
-        if (cur == CONCATENATION) {
+        if (cur == YY_CONCATENATION) {
             pg2 = NfaStack.top();
             NfaStack.pop();
             pg1 = NfaStack.top();
@@ -30,7 +30,7 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
 
             NfaStack.push(pg);
         }
-        else if (cur == UNION) {
+        else if (cur == YY_UNION) {
             pg1 = NfaStack.top();
             NfaStack.pop();
             pg2 = NfaStack.top();
@@ -40,7 +40,7 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
 
             NfaStack.push(pg);
         }
-        else if (cur == KLEENE_CLOSURE) {
+        else if (cur == YY_KLEENE_CLOSURE) {
             pg = NfaStack.top();
             NfaStack.pop();
 
@@ -62,31 +62,31 @@ void SuffixFormReToNfa::DoIt(std::vector<SYMBOL> suffixFormRe)
     setGraphID(pNfaGraph);
 }
 
-NODE_ID SuffixFormReToNfa::GetStartNodeID()
+YY_NODE_ID YY_SuffixFormReToNfa::GetStartNodeID()
 {
     return pNfaGraph->startNode->ID;
 }
 
-NODE_ID SuffixFormReToNfa::GetFinalNodeID()
+YY_NODE_ID YY_SuffixFormReToNfa::GetFinalNodeID()
 {
     return pNfaGraph->endNode->ID;
 }
 
-std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(NODE_ID nodeID)
+std::set<YY_NODE_ID> YY_SuffixFormReToNfa::CalculateEpsilonClosure(YY_NODE_ID nodeID)
 {
-    set<NODE_ID> resSet;
-    queue<NODE_ID> queSet;
+    set<YY_NODE_ID> resSet;
+    queue<YY_NODE_ID> queSet;
 
     queSet.push(nodeID);
     while (!queSet.empty()) {
-        NODE_ID cur_id = queSet.front();
+		YY_NODE_ID cur_id = queSet.front();
         queSet.pop();
         resSet.insert(cur_id);
 
         for (vector<Link*>::iterator ite = pNfaGraph->nodeList[cur_id]->nextLinks.begin();
             ite != pNfaGraph->nodeList[cur_id]->nextLinks.end(); ite++) {
-            if ((*ite)->terminal == EPSILON) {
-                NODE_ID nxt_id = (*ite)->nextNode->ID;
+            if ((*ite)->terminal == YY_EPSILON) {
+				YY_NODE_ID nxt_id = (*ite)->nextNode->ID;
                 if (resSet.find(nxt_id) == resSet.end()) {
                     queSet.push(nxt_id);
                 }
@@ -97,25 +97,25 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(NODE_ID nodeID)
     return resSet;
 }
 
-std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(std::set<NODE_ID> nodeIDs)
+std::set<YY_NODE_ID> YY_SuffixFormReToNfa::CalculateEpsilonClosure(std::set<YY_NODE_ID> nodeIDs)
 {
-    set<NODE_ID> resSet;
-    queue<NODE_ID> queSet;
+    set<YY_NODE_ID> resSet;
+    queue<YY_NODE_ID> queSet;
 
-    for (set<NODE_ID>::iterator ite = nodeIDs.begin();
+    for (set<YY_NODE_ID>::iterator ite = nodeIDs.begin();
         ite != nodeIDs.end(); ite++) {
         queSet.push(*ite);
     }
 
     while (!queSet.empty()) {
-        NODE_ID cur_id = queSet.front();
+		YY_NODE_ID cur_id = queSet.front();
         queSet.pop();
         resSet.insert(cur_id);
 
         for (vector<Link*>::iterator ite = pNfaGraph->nodeList[cur_id]->nextLinks.begin();
             ite != pNfaGraph->nodeList[cur_id]->nextLinks.end(); ite++) {
-            if ((*ite)->terminal == EPSILON) {
-                NODE_ID nxt_id = (*ite)->nextNode->ID;
+            if ((*ite)->terminal == YY_EPSILON) {
+				YY_NODE_ID nxt_id = (*ite)->nextNode->ID;
                 if (resSet.find(nxt_id) == resSet.end()) {
                     queSet.push(nxt_id);
                 }
@@ -126,9 +126,9 @@ std::set<NODE_ID> SuffixFormReToNfa::CalculateEpsilonClosure(std::set<NODE_ID> n
     return resSet;
 }
 
-std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(NODE_ID curNodeID, TERMINAL terminal)
+std::set<YY_NODE_ID> YY_SuffixFormReToNfa::GetNextNodeIDs(YY_NODE_ID curNodeID, YY_TERMINAL terminal)
 {
-    set<NODE_ID> resSet;
+    set<YY_NODE_ID> resSet;
     for (vector<Link*>::iterator ite = pNfaGraph->nodeList[curNodeID]->nextLinks.begin();
         ite != pNfaGraph->nodeList[curNodeID]->nextLinks.end(); ite++) {
         if ((*ite)->terminal == terminal) {
@@ -139,12 +139,12 @@ std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(NODE_ID curNodeID, TERMINAL 
     return resSet;
 }
 
-std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(std::set<NODE_ID> curNodeIDs, TERMINAL terminal)
+std::set<YY_NODE_ID> YY_SuffixFormReToNfa::GetNextNodeIDs(std::set<YY_NODE_ID> curNodeIDs, YY_TERMINAL terminal)
 {
-    set<NODE_ID> resSet;
-    for (set<NODE_ID>::iterator ite = curNodeIDs.begin();
+    set<YY_NODE_ID> resSet;
+    for (set<YY_NODE_ID>::iterator ite = curNodeIDs.begin();
         ite != curNodeIDs.end(); ite++) {
-        NODE_ID curNodeID = *ite;
+		YY_NODE_ID curNodeID = *ite;
         for (vector<Link*>::iterator ite = pNfaGraph->nodeList[curNodeID]->nextLinks.begin();
             ite != pNfaGraph->nodeList[curNodeID]->nextLinks.end(); ite++) {
             if ((*ite)->terminal == terminal) {
@@ -156,16 +156,16 @@ std::set<NODE_ID> SuffixFormReToNfa::GetNextNodeIDs(std::set<NODE_ID> curNodeIDs
     return resSet;
 }
 
-int SuffixFormReToNfa::Match(std::string input)
+int YY_SuffixFormReToNfa::Match(std::string input)
 {
     return 0;
 }
 
-void SuffixFormReToNfa::OptimizeNfa()
+void YY_SuffixFormReToNfa::OptimizeNfa()
 {
 }
 
-void SuffixFormReToNfa::output()
+void YY_SuffixFormReToNfa::output()
 {
     cout << "==========NFA==========" << endl;
     for (vector<Node*>::iterator ite = pNfaGraph->nodeList.begin();
@@ -185,7 +185,7 @@ void SuffixFormReToNfa::output()
     cout << endl;
 }
 
-SuffixFormReToNfa::Graph *SuffixFormReToNfa::createGraph(TERMINAL t)
+YY_SuffixFormReToNfa::Graph *YY_SuffixFormReToNfa::createGraph(YY_TERMINAL t)
 {
     Graph *pg = new Graph;
 
@@ -208,7 +208,7 @@ SuffixFormReToNfa::Graph *SuffixFormReToNfa::createGraph(TERMINAL t)
     return pg;
 }
 
-SuffixFormReToNfa::Graph *SuffixFormReToNfa::unionGraph(Graph *pg1, Graph *pg2)
+YY_SuffixFormReToNfa::Graph *YY_SuffixFormReToNfa::unionGraph(Graph *pg1, Graph *pg2)
 {
     for (vector<Link*>::iterator ite = pg2->startNode->nextLinks.begin();
         ite != pg2->startNode->nextLinks.end(); ite++)
@@ -243,7 +243,7 @@ SuffixFormReToNfa::Graph *SuffixFormReToNfa::unionGraph(Graph *pg1, Graph *pg2)
     return pg1;
 }
 
-SuffixFormReToNfa::Graph *SuffixFormReToNfa::concatenateGraph(Graph *pg1, Graph *pg2)
+YY_SuffixFormReToNfa::Graph *YY_SuffixFormReToNfa::concatenateGraph(Graph *pg1, Graph *pg2)
 {
     for (vector<Link*>::iterator ite = pg2->startNode->nextLinks.begin();
         ite != pg2->startNode->nextLinks.end(); ite++)
@@ -273,7 +273,7 @@ SuffixFormReToNfa::Graph *SuffixFormReToNfa::concatenateGraph(Graph *pg1, Graph 
     return pg1;
 }
 
-SuffixFormReToNfa::Graph *SuffixFormReToNfa::kleeneClosure(Graph *pg)
+YY_SuffixFormReToNfa::Graph *YY_SuffixFormReToNfa::kleeneClosure(Graph *pg)
 {
     Node *startNode = new Node;
     pg->nodeList.push_back(startNode);
@@ -282,19 +282,19 @@ SuffixFormReToNfa::Graph *SuffixFormReToNfa::kleeneClosure(Graph *pg)
     pg->nodeList.push_back(endNode);
 
     Link *link1 = new Link;
-    link1->terminal = EPSILON;
+    link1->terminal = YY_EPSILON;
     pg->linkList.push_back(link1);
 
     Link *link2 = new Link;
-    link2->terminal = EPSILON;
+    link2->terminal = YY_EPSILON;
     pg->linkList.push_back(link2);
 
     Link *link3 = new Link;
-    link3->terminal = EPSILON;
+    link3->terminal = YY_EPSILON;
     pg->linkList.push_back(link3);
 
     Link *link4 = new Link;
-    link4->terminal = EPSILON;
+    link4->terminal = YY_EPSILON;
     pg->linkList.push_back(link4);
 
     startNode->nextLinks.push_back(link1);
@@ -323,7 +323,7 @@ SuffixFormReToNfa::Graph *SuffixFormReToNfa::kleeneClosure(Graph *pg)
     return pg;
 }
 
-void SuffixFormReToNfa::deleteGraph(Graph *pg)
+void YY_SuffixFormReToNfa::deleteGraph(Graph *pg)
 {
     for (vector<Link*>::iterator ite = pg->linkList.begin();
         ite != pg->linkList.end(); ite++)
@@ -337,7 +337,7 @@ void SuffixFormReToNfa::deleteGraph(Graph *pg)
     }
 }
 
-void SuffixFormReToNfa::setGraphID(Graph * pg)
+void YY_SuffixFormReToNfa::setGraphID(Graph * pg)
 {
     for (int i = 0; i < pg->nodeList.size(); i++) {
         pg->nodeList[i]->ID = i;

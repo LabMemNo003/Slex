@@ -4,18 +4,18 @@
 
 using namespace std;
 
-DfaToDriveTable::DfaToDriveTable(DFA dfa)
+YY_DfaToDriveTable::YY_DfaToDriveTable(DFA dfa)
 {
     DoIt(dfa);
 }
 
-void DfaToDriveTable::DoIt(NfaToDfa dfa)
+void YY_DfaToDriveTable::DoIt(YY_NfaToDfa dfa)
 {
     stateCnt = dfa.stateCnt();
 
-    dt = new NODE_ID*[stateCnt];
+    dt = new YY_NODE_ID*[stateCnt];
     for (int i = 0; i < stateCnt; i++)
-        dt[i] = new NODE_ID[128];
+        dt[i] = new YY_NODE_ID[128];
 
     for (int i = 0; i < stateCnt; i++) {
         for (int j = 0; j < 128; j++) {
@@ -26,21 +26,21 @@ void DfaToDriveTable::DoIt(NfaToDfa dfa)
     startNode = dfa.GetStartNodeID();
     
     isEndNode = new bool[stateCnt]();
-    set<NODE_ID> endNodes = dfa.GetFinalNodeIDs();
-    for (set<NODE_ID>::iterator ite = endNodes.begin();
+    set<YY_NODE_ID> endNodes = dfa.GetFinalNodeIDs();
+    for (set<YY_NODE_ID>::iterator ite = endNodes.begin();
         ite != endNodes.end(); ite++)
         isEndNode[*ite] = true;
 }
 
-NODE_ID DfaToDriveTable::GetStartNodeID()
+YY_NODE_ID YY_DfaToDriveTable::GetStartNodeID()
 {
     return startNode;
 }
 
-std::set<NODE_ID> DfaToDriveTable::GetFinalNodeIDs()
+std::set<YY_NODE_ID> YY_DfaToDriveTable::GetFinalNodeIDs()
 {
-    set<NODE_ID> endNodes;
-    for (NODE_ID i = 0; i < stateCnt; i++) {
+    set<YY_NODE_ID> endNodes;
+    for (YY_NODE_ID i = 0; i < stateCnt; i++) {
         if (isEndNode[i]) {
             endNodes.insert(i);
         }
@@ -48,15 +48,15 @@ std::set<NODE_ID> DfaToDriveTable::GetFinalNodeIDs()
     return endNodes;
 }
 
-NODE_ID DfaToDriveTable::GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal)
+YY_NODE_ID YY_DfaToDriveTable::GetNextNodeID(YY_NODE_ID curNodeID, YY_TERMINAL terminal)
 {
     return dt[curNodeID][terminal];
 }
 
-int DfaToDriveTable::Match(std::string input)
+int YY_DfaToDriveTable::Match(std::string input)
 {
     int res = 0;
-    NODE_ID state = startNode;
+	YY_NODE_ID state = startNode;
 
     int i = 0;
     int len = int(input.length());
@@ -74,7 +74,7 @@ int DfaToDriveTable::Match(std::string input)
     return res;
 }
 
-void DfaToDriveTable::output()
+void YY_DfaToDriveTable::output()
 {
     cout << "++++++++++DFA++++++++++" << endl;
     for (int i = 0; i < stateCnt; i++)

@@ -7,10 +7,10 @@
 
 //============================== PHASE 1 ==============================
 
-class ReSymbolProcess {
+class YY_ReSymbolProcess {
 public:
     // You need to implement this method.
-    std::vector<SYMBOL> DoIt(std::string originalRe);
+    std::vector<YY_SYMBOL> DoIt(std::string originalRe);
 
 private:
 

@@ -4,14 +4,14 @@
 
 using namespace std;
 
-NfaToDfa::NfaToDfa(NFA nfa)
+YY_NfaToDfa::YY_NfaToDfa(NFA nfa)
 {
     DoIt(nfa);
 }
 
-void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
+void YY_NfaToDfa::DoIt(YY_SuffixFormReToNfa nfa)
 {
-    nodes.push_back(set<NODE_ID>());
+    nodes.push_back(set<YY_NODE_ID>());
     dt.push_back(DtLine());
     
     nodes.push_back(nfa.CalculateEpsilonClosure(nfa.GetStartNodeID()));
@@ -22,11 +22,11 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
     {
         if (ind >= nodes.size()) break;
 
-        set<NODE_ID> curNode = nodes[ind];
-        for (TERMINAL t = 0; t < 128; t++)
+        set<YY_NODE_ID> curNode = nodes[ind];
+        for (YY_TERMINAL t = 0; t < 128; t++)
         {
-            set<NODE_ID> tmpNode = nfa.GetNextNodeIDs(curNode, t);
-            set<NODE_ID> nxtNode = nfa.CalculateEpsilonClosure(tmpNode);
+            set<YY_NODE_ID> tmpNode = nfa.GetNextNodeIDs(curNode, t);
+            set<YY_NODE_ID> nxtNode = nfa.CalculateEpsilonClosure(tmpNode);
 
             int i = 0;
             while(i < nodes.size())
@@ -34,8 +34,8 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
                 if (nodes[i].size() == nxtNode.size())
                 {
                     bool equal = true;
-                    set<NODE_ID>::iterator ite1 = nodes[i].begin();
-                    set<NODE_ID>::iterator ite2 = nxtNode.begin();
+                    set<YY_NODE_ID>::iterator ite1 = nodes[i].begin();
+                    set<YY_NODE_ID>::iterator ite2 = nxtNode.begin();
                     while (ite2 != nxtNode.end())
                     {
                         if ((*ite1) != (*ite2)) {
@@ -65,7 +65,7 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
 
     startNode = 1;
 
-    NODE_ID finalNode = nfa.GetFinalNodeID();
+	YY_NODE_ID finalNode = nfa.GetFinalNodeID();
     for (int i = 0; i < nodes.size(); i++) {
         if (nodes[i].find(finalNode) != nodes[i].end()) {
             endNodes.insert(i);
@@ -73,31 +73,31 @@ void NfaToDfa::DoIt(SuffixFormReToNfa nfa)
     }
 }
 
-NODE_ID NfaToDfa::GetStartNodeID()
+YY_NODE_ID YY_NfaToDfa::GetStartNodeID()
 {
     return startNode;
 }
 
-std::set<NODE_ID> NfaToDfa::GetFinalNodeIDs()
+std::set<YY_NODE_ID> YY_NfaToDfa::GetFinalNodeIDs()
 {
     return endNodes;
 }
 
-NODE_ID NfaToDfa::GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal)
+YY_NODE_ID YY_NfaToDfa::GetNextNodeID(YY_NODE_ID curNodeID, YY_TERMINAL terminal)
 {
     return dt[curNodeID][terminal];
 }
 
-int NfaToDfa::Match(std::string input)
+int YY_NfaToDfa::Match(std::string input)
 {
     return 0;
 }
 
-void NfaToDfa::OptimizeDfa()
+void YY_NfaToDfa::OptimizeDfa()
 {
 }
 
-void NfaToDfa::output()
+void YY_NfaToDfa::output()
 {
     cout << "**********DFA**********" << endl;
     for (int i = 0; i < nodes.size(); i++)
@@ -114,7 +114,7 @@ void NfaToDfa::output()
     }
     cout << "StartID: " << 1 << endl;
     cout << "EndID:";
-    for (set<NODE_ID>::iterator ite = endNodes.begin();
+    for (set<YY_NODE_ID>::iterator ite = endNodes.begin();
         ite != endNodes.end(); ite++)
     {
         cout << " " << *ite;
@@ -124,7 +124,7 @@ void NfaToDfa::output()
     cout << endl;
 }
 
-int NfaToDfa::stateCnt()
+int YY_NfaToDfa::stateCnt()
 {
     return int(nodes.size());
 }

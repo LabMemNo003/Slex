@@ -9,15 +9,15 @@
 
 //============================== PHASE 5 ==============================
 
-typedef class NfaToDfa {
+typedef class YY_NfaToDfa {
 public:
-    NfaToDfa(NFA nfa);
+	YY_NfaToDfa(NFA nfa);
 
     // You need to implement these methods.
-    void DoIt(SuffixFormReToNfa nfa);
-    NODE_ID GetStartNodeID();
-    std::set<NODE_ID> GetFinalNodeIDs();
-    NODE_ID GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal);
+    void DoIt(YY_SuffixFormReToNfa nfa);
+	YY_NODE_ID GetStartNodeID();
+    std::set<YY_NODE_ID> GetFinalNodeIDs();
+	YY_NODE_ID GetNextNodeID(YY_NODE_ID curNodeID, YY_TERMINAL terminal);
     int Match(std::string input);
 
     // Optional
@@ -28,14 +28,14 @@ public:
 
 private:
     struct DtLine {
-        NODE_ID nxtNodes[128] = {};
-        const NODE_ID &operator[](int ind) const { return nxtNodes[ind]; }
-        NODE_ID &operator[](int ind) { return nxtNodes[ind]; }
+		YY_NODE_ID nxtNodes[128] = {};
+        const YY_NODE_ID &operator[](int ind) const { return nxtNodes[ind]; }
+		YY_NODE_ID &operator[](int ind) { return nxtNodes[ind]; }
     };
 
     std::vector<DtLine> dt;
-    std::vector<std::set<NODE_ID>> nodes;
-    NODE_ID startNode;
-    std::set<NODE_ID> endNodes;
+    std::vector<std::set<YY_NODE_ID>> nodes;
+	YY_NODE_ID startNode;
+    std::set<YY_NODE_ID> endNodes;
 
 }DFA;

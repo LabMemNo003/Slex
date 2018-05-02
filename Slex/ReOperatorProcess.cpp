@@ -6,12 +6,12 @@
 
 using namespace std;
 
-void ReOperatorProcess::display(const vector<SYMBOL> &v) {
+void YY_ReOperatorProcess::display(const vector<YY_SYMBOL> &v) {
     for (int i = 0; i < int(v.size());i++)
     {
         if (v[i]<128) cout << char(v[i]);
         else {
-            if (v[i] == EPSILON) cout << "EPSILON";
+            if (v[i] == YY_EPSILON) cout << "EPSILON";
             else if (v[i] == 301)cout << "(";
             else if (v[i] == 302)cout << ")";
             else if (v[i] == 303)cout << "*";
@@ -38,10 +38,10 @@ bool isnum(int a) {
     else return false;
 }
 
-bool is_ext(int &i, std::vector<SYMBOL> &processedRe) {
+bool is_ext(int &i, std::vector<YY_SYMBOL> &processedRe) {
     if (i + 1 < int(processedRe.size())) {
         int c = processedRe[i + 1];
-        if (c == KLEENE_CLOSURE || c == POSITIVE_CLOSURE || c == QUESTION || c == OPEN_CURLY)
+        if (c == YY_KLEENE_CLOSURE || c == YY_POSITIVE_CLOSURE || c == YY_QUESTION || c == YY_OPEN_CURLY)
             return true;
         else
             return false;
@@ -50,36 +50,36 @@ bool is_ext(int &i, std::vector<SYMBOL> &processedRe) {
         return false;
 }
 
-void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
+void open_b(int &i, std::vector<YY_SYMBOL> &re, std::vector<YY_SYMBOL> &v_temp) {
     i++;
     int ascii[128];
     for (int j = 0;j < 128;j++)
         ascii[j] = 1;
-    if (re[i] == CARET) {
+    if (re[i] == YY_CARET) {
         i++;
-        while (re[i] != CLOSE_BRACKET) {
+        while (re[i] != YY_CLOSE_BRACKET) {
             if (re[i] < 128)
                 ascii[re[i]] = 0;
             else {
-                if (re[i] == OPEN_PAREN) ascii[int('(')] = 0;
-                else if (re[i] == CLOSE_PAREN) ascii[int(')')] = 0;
-                else if (re[i] == KLEENE_CLOSURE) ascii[int('*')] = 0;
-                else if (re[i] == UNION) ascii[int('|')] = 0;
-                else if (re[i] == OPEN_CURLY) ascii[int('{')] = 0;
-                else if (re[i] == CLOSE_CURLY) ascii[int('}')] = 0;
-                else if (re[i] == PERIOD) ascii[int('.')] = 0;
-                else if (re[i] == HYPHEN);
-                else if (re[i] == CARET) ascii[int('^')] = 0;
-                else if (re[i] == POSITIVE_CLOSURE) ascii[int('+')] = 0;
-                else if (re[i] == QUESTION) ascii[int('?')] = 0;
-                else if (re[i] == QUOTATION) ascii[int('\"')] = 0;
+                if (re[i] == YY_OPEN_PAREN) ascii[int('(')] = 0;
+                else if (re[i] == YY_CLOSE_PAREN) ascii[int(')')] = 0;
+                else if (re[i] == YY_KLEENE_CLOSURE) ascii[int('*')] = 0;
+                else if (re[i] == YY_UNION) ascii[int('|')] = 0;
+                else if (re[i] == YY_OPEN_CURLY) ascii[int('{')] = 0;
+                else if (re[i] == YY_CLOSE_CURLY) ascii[int('}')] = 0;
+                else if (re[i] == YY_PERIOD) ascii[int('.')] = 0;
+                else if (re[i] == YY_HYPHEN);
+                else if (re[i] == YY_CARET) ascii[int('^')] = 0;
+                else if (re[i] == YY_POSITIVE_CLOSURE) ascii[int('+')] = 0;
+                else if (re[i] == YY_QUESTION) ascii[int('?')] = 0;
+                else if (re[i] == YY_QUOTATION) ascii[int('\"')] = 0;
                 else {
                     cout << "ascii error1" << endl;
                     getchar();
                 }
             }
-            if (re[i] == HYPHEN) {
-                if (re[i - 1] == CARET || re[i + 1] == CLOSE_BRACKET)
+            if (re[i] == YY_HYPHEN) {
+                if (re[i - 1] == YY_CARET || re[i + 1] == YY_CLOSE_BRACKET)
                     ascii[int('-')] = 0;
                 else {
                     if (int(re[i - 1]) > int(re[i + 1])) {
@@ -92,53 +92,53 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
             i++;
         }
         if (v_temp.size() != 0) {
-            if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-                v_temp.push_back(CONCATENATION);
+            if (v_temp[v_temp.size() - 1] != YY_OPEN_PAREN || v_temp[v_temp.size() - 1] != YY_UNION) {
+                v_temp.push_back(YY_CONCATENATION);
             }
         }
-        v_temp.push_back(OPEN_PAREN);
+        v_temp.push_back(YY_OPEN_PAREN);
         for (int j = 0;j < 128;j++) {
             if (ascii[j] == 1) {
                 v_temp.push_back(j);
-                v_temp.push_back(UNION);
+                v_temp.push_back(YY_UNION);
             }
         }
-        if (v_temp[v_temp.size() - 1] == UNION)
+        if (v_temp[v_temp.size() - 1] == YY_UNION)
             v_temp.pop_back();
-        v_temp.push_back(CLOSE_PAREN);
+        v_temp.push_back(YY_CLOSE_PAREN);
     }
     else {
-        if (re[i] == HYPHEN) {
+        if (re[i] == YY_HYPHEN) {
             ascii[int('-')] = 0;
             i++;
-            if (re[i] == CARET) {
+            if (re[i] == YY_CARET) {
                 ascii[int('^')] = 0;
                 i++;
             }
         }
-        while (re[i] != CLOSE_BRACKET) {
+        while (re[i] != YY_CLOSE_BRACKET) {
             if (re[i] < 128)
                 ascii[re[i]] = 0;
             else {
-                if (re[i] == OPEN_PAREN) ascii[int('(')] = 0;
-                else if (re[i] == CLOSE_PAREN) ascii[int(')')] = 0;
-                else if (re[i] == KLEENE_CLOSURE) ascii[int('*')] = 0;
-                else if (re[i] == UNION) ascii[int('|')] = 0;
-                else if (re[i] == OPEN_CURLY) ascii[int('{')] = 0;
-                else if (re[i] == CLOSE_CURLY) ascii[int('}')] = 0;
-                else if (re[i] == PERIOD) ascii[int('.')] = 0;
-                else if (re[i] == HYPHEN);
-                else if (re[i] == CARET) ascii[int('^')] = 0;
-                else if (re[i] == POSITIVE_CLOSURE) ascii[int('+')] = 0;
-                else if (re[i] == QUESTION) ascii[int('?')] = 0;
-                else if (re[i] == QUOTATION) ascii[int('\"')] = 0;
+                if (re[i] == YY_OPEN_PAREN) ascii[int('(')] = 0;
+                else if (re[i] == YY_CLOSE_PAREN) ascii[int(')')] = 0;
+                else if (re[i] == YY_KLEENE_CLOSURE) ascii[int('*')] = 0;
+                else if (re[i] == YY_UNION) ascii[int('|')] = 0;
+                else if (re[i] == YY_OPEN_CURLY) ascii[int('{')] = 0;
+                else if (re[i] == YY_CLOSE_CURLY) ascii[int('}')] = 0;
+                else if (re[i] == YY_PERIOD) ascii[int('.')] = 0;
+                else if (re[i] == YY_HYPHEN);
+                else if (re[i] == YY_CARET) ascii[int('^')] = 0;
+                else if (re[i] == YY_POSITIVE_CLOSURE) ascii[int('+')] = 0;
+                else if (re[i] == YY_QUESTION) ascii[int('?')] = 0;
+                else if (re[i] == YY_QUOTATION) ascii[int('\"')] = 0;
                 else {
                     cout << "ascii error3" << endl;
                     getchar();
                 }
             }
-            if (re[i] == HYPHEN) {
-                if (re[i + 1] == CLOSE_BRACKET)
+            if (re[i] == YY_HYPHEN) {
+                if (re[i + 1] == YY_CLOSE_BRACKET)
                     ascii[int('-')] = 0;
                 else {
                     if (int(re[i - 1]) > int(re[i + 1])) {
@@ -152,24 +152,24 @@ void open_b(int &i, std::vector<SYMBOL> &re, std::vector<SYMBOL> &v_temp) {
             i++;
         }
         if (v_temp.size() != 0) {
-            if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-                v_temp.push_back(CONCATENATION);
+            if (v_temp[v_temp.size() - 1] != YY_OPEN_PAREN || v_temp[v_temp.size() - 1] != YY_UNION) {
+                v_temp.push_back(YY_CONCATENATION);
             }
         }
-        v_temp.push_back(OPEN_PAREN);
+        v_temp.push_back(YY_OPEN_PAREN);
         for (int j = 0;j < 128;j++) {
             if (ascii[j] == 0) {
                 v_temp.push_back(j);
-                v_temp.push_back(UNION);
+                v_temp.push_back(YY_UNION);
             }
         }
-        if (v_temp[v_temp.size() - 1] == UNION)
+        if (v_temp[v_temp.size() - 1] == YY_UNION)
             v_temp.pop_back();
-        v_temp.push_back(CLOSE_PAREN);
+        v_temp.push_back(YY_CLOSE_PAREN);
     }
 }
 
-void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_temp) {
+void open_c(int &i, std::vector<YY_SYMBOL> &processedRe, std::vector<YY_SYMBOL> &v_temp) {
     int length = v_temp.size();
     i++;
     if (isnum(processedRe[i])) {
@@ -184,25 +184,25 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
             s.pop();
             h *= 10;
         }
-        if (processedRe[i] == CLOSE_CURLY) {
+        if (processedRe[i] == YY_CLOSE_CURLY) {
             for (int j = 0;j < t1 - 1;j++) {
-                v_temp.push_back(CONCATENATION);
+                v_temp.push_back(YY_CONCATENATION);
                 for (int z = 0;z < length;z++)
                     v_temp.push_back(v_temp[z]);
             }
         }
         else if (processedRe[i] == int(',')) {
             i++;
-            if (processedRe[i] == CLOSE_CURLY) {
+            if (processedRe[i] == YY_CLOSE_CURLY) {
                 for (int j = 0;j < t1;j++) {
                     if (j != 0)
                         for (int z = 0;z < length;z++)
                             v_temp.push_back(v_temp[z]);
-                    v_temp.push_back(CONCATENATION);
+                    v_temp.push_back(YY_CONCATENATION);
                 }
                 for (int z = 0;z < length;z++)
                     v_temp.push_back(v_temp[z]);
-                v_temp.push_back(KLEENE_CLOSURE);
+                v_temp.push_back(YY_KLEENE_CLOSURE);
             }
             else {
                 h = 1;
@@ -215,10 +215,10 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                     s.pop();
                     h *= 10;
                 }
-                if (processedRe[i] == CLOSE_CURLY) {
+                if (processedRe[i] == YY_CLOSE_CURLY) {
                     if (t2 == t1) {
                         for (int j = 0;j < t1 - 1;j++) {
-                            v_temp.push_back(CONCATENATION);
+                            v_temp.push_back(YY_CONCATENATION);
                             for (int z = 0;z < length;z++)
                                 v_temp.push_back(v_temp[z]);
                         }
@@ -228,19 +228,19 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
                             if (j != 0)
                                 for (int z = 0;z < length;z++)
                                     v_temp.push_back(v_temp[z]);
-                            v_temp.push_back(CONCATENATION);
+                            v_temp.push_back(YY_CONCATENATION);
                         }
-                        v_temp.push_back(OPEN_PAREN);
-                        v_temp.push_back(EPSILON);
+                        v_temp.push_back(YY_OPEN_PAREN);
+                        v_temp.push_back(YY_EPSILON);
                         for (int j = 0;j < t2 - t1;j++) {
-                            v_temp.push_back(UNION);
+                            v_temp.push_back(YY_UNION);
                             for (int j1 = 0;j1 <= j;j1++) {
                                 for (int z = 0;z < length;z++)
                                     v_temp.push_back(v_temp[z]);
-                                if (j1 != j) v_temp.push_back(CONCATENATION);
+                                if (j1 != j) v_temp.push_back(YY_CONCATENATION);
                             }
                         }
-                        v_temp.push_back(CLOSE_PAREN);
+                        v_temp.push_back(YY_CLOSE_PAREN);
                     }
                     else {
                         cout << "open_c:error0!" << endl;
@@ -264,142 +264,142 @@ void open_c(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
     }
 }
 
-void period(std::vector<SYMBOL> &v_temp) {
+void period(std::vector<YY_SYMBOL> &v_temp) {
     if (v_temp.size() != 0) {
-        if (v_temp[v_temp.size() - 1] != OPEN_PAREN || v_temp[v_temp.size() - 1] != UNION) {
-            v_temp.push_back(CONCATENATION);
+        if (v_temp[v_temp.size() - 1] != YY_OPEN_PAREN || v_temp[v_temp.size() - 1] != YY_UNION) {
+            v_temp.push_back(YY_CONCATENATION);
         }
     }
-    v_temp.push_back(OPEN_PAREN);
+    v_temp.push_back(YY_OPEN_PAREN);
     for (int i = 0;i < 128;i++) {
         if (i != 10) {
             v_temp.push_back(i);
             if (i != 127)
-                v_temp.push_back(UNION);
+                v_temp.push_back(YY_UNION);
         }
     }
-    v_temp.push_back(CLOSE_PAREN);
+    v_temp.push_back(YY_CLOSE_PAREN);
 }
 
-void kleene(std::vector<SYMBOL> &v_temp) {
-    vector<SYMBOL>::iterator it = v_temp.begin();
-    v_temp.insert(it, OPEN_PAREN);
-    v_temp.push_back(KLEENE_CLOSURE);
-    v_temp.push_back(CLOSE_PAREN);
+void kleene(std::vector<YY_SYMBOL> &v_temp) {
+    vector<YY_SYMBOL>::iterator it = v_temp.begin();
+    v_temp.insert(it, YY_OPEN_PAREN);
+    v_temp.push_back(YY_KLEENE_CLOSURE);
+    v_temp.push_back(YY_CLOSE_PAREN);
 }
 
-void quest(std::vector<SYMBOL> &v_temp) {
+void quest(std::vector<YY_SYMBOL> &v_temp) {
     if (v_temp.size() == 0) {
         cout << "quest error1" << endl;
         getchar();
     }
-    vector<SYMBOL>::iterator it = v_temp.begin();
-    v_temp.insert(it, OPEN_PAREN);
-    v_temp.push_back(UNION);
-    v_temp.push_back(EPSILON);
-    v_temp.push_back(CLOSE_PAREN);
+    vector<YY_SYMBOL>::iterator it = v_temp.begin();
+    v_temp.insert(it, YY_OPEN_PAREN);
+    v_temp.push_back(YY_UNION);
+    v_temp.push_back(YY_EPSILON);
+    v_temp.push_back(YY_CLOSE_PAREN);
 
 }
 
-void positive(std::vector<SYMBOL> &v_temp) {
+void positive(std::vector<YY_SYMBOL> &v_temp) {
     int s = v_temp.size();
-    v_temp.push_back(CONCATENATION);
+    v_temp.push_back(YY_CONCATENATION);
     for (int i = 0;i < s;i++)
         v_temp.push_back(v_temp[i]);
 
-    vector<SYMBOL>::iterator it = v_temp.begin();
-    v_temp.insert(it, OPEN_PAREN);
-    v_temp.push_back(KLEENE_CLOSURE);
-    v_temp.push_back(CLOSE_PAREN);
+    vector<YY_SYMBOL>::iterator it = v_temp.begin();
+    v_temp.insert(it, YY_OPEN_PAREN);
+    v_temp.push_back(YY_KLEENE_CLOSURE);
+    v_temp.push_back(YY_CLOSE_PAREN);
 }
 
-void other(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_temp) {
+void other(int &i, std::vector<YY_SYMBOL> &processedRe, std::vector<YY_SYMBOL> &v_temp) {
     v_temp.push_back(processedRe[i]);
 }
 
-void close_p(std::vector<SYMBOL> &v_temp_all, std::vector<SYMBOL> &v_temp_out) {
-    v_temp_all.push_back(CLOSE_PAREN);
+void close_p(std::vector<YY_SYMBOL> &v_temp_all, std::vector<YY_SYMBOL> &v_temp_out) {
+    v_temp_all.push_back(YY_CLOSE_PAREN);
     if (v_temp_out.size() != 0) {
-        if (v_temp_out[v_temp_out.size() - 1] != OPEN_PAREN&&v_temp_out[v_temp_out.size() - 1] != UNION)
-            v_temp_out.push_back(CONCATENATION);
+        if (v_temp_out[v_temp_out.size() - 1] != YY_OPEN_PAREN&&v_temp_out[v_temp_out.size() - 1] != YY_UNION)
+            v_temp_out.push_back(YY_CONCATENATION);
     }
     for (int i = 0;i < int(v_temp_all.size());i++)
         v_temp_out.push_back(v_temp_all[i]);
 }
 
-void temp_to_all(std::vector<SYMBOL> &v_temp, std::vector<SYMBOL> &v_temp_all) {
+void temp_to_all(std::vector<YY_SYMBOL> &v_temp, std::vector<YY_SYMBOL> &v_temp_all) {
     if (v_temp_all.size() != 0) {
-        if(v_temp[0]!= UNION)
-            if (v_temp_all[v_temp_all.size() - 1] != OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != UNION) {
-                v_temp_all.push_back(CONCATENATION);
+        if(v_temp[0]!= YY_UNION)
+            if (v_temp_all[v_temp_all.size() - 1] != YY_OPEN_PAREN&&v_temp_all[v_temp_all.size() - 1] != YY_UNION) {
+                v_temp_all.push_back(YY_CONCATENATION);
             }
     }
     for (int i = 0;i < int(v_temp.size());i++)
         v_temp_all.push_back(v_temp[i]);
 }
 
-void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_temp_out) {
-    std::vector<SYMBOL> v_temp_all;
-    v_temp_all.push_back(OPEN_PAREN);
+void open_p(int &i, std::vector<YY_SYMBOL> &processedRe, std::vector<YY_SYMBOL> &v_temp_out) {
+    std::vector<YY_SYMBOL> v_temp_all;
+    v_temp_all.push_back(YY_OPEN_PAREN);
     i++;
     for (;i < int(processedRe.size());i++) {
         int c = processedRe[i];
-        std::vector<SYMBOL> v_temp;
-        if (c == CLOSE_PAREN) {
+        std::vector<YY_SYMBOL> v_temp;
+        if (c == YY_CLOSE_PAREN) {
             close_p(v_temp_all, v_temp_out);
             return;
         }
-        else if (c == OPEN_BRACKET) {
+        else if (c == YY_OPEN_BRACKET) {
             open_b(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == OPEN_CURLY) {
+        else if (c == YY_OPEN_CURLY) {
             open_c(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == PERIOD) {
+        else if (c == YY_PERIOD) {
             period(v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == OPEN_PAREN) {
+        else if (c == YY_OPEN_PAREN) {
             open_p(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
@@ -409,11 +409,11 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
             other(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
@@ -423,63 +423,63 @@ void open_p(int &i, std::vector<SYMBOL> &processedRe, std::vector<SYMBOL> &v_tem
     }
 }
 
-std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
+std::vector<YY_SYMBOL> YY_ReOperatorProcess::DoIt(std::vector<YY_SYMBOL> processedRe)
 {
-    std::vector<SYMBOL> v;
+    std::vector<YY_SYMBOL> v;
     for (int i = 0;i < int(processedRe.size());i++) {
         int c = processedRe[i];
-        std::vector<SYMBOL> v_temp;
-        if (c == OPEN_BRACKET) {
+        std::vector<YY_SYMBOL> v_temp;
+        if (c == YY_OPEN_BRACKET) {
             open_b(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == OPEN_CURLY) {
+        else if (c == YY_OPEN_CURLY) {
             open_c(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == PERIOD) {
+        else if (c == YY_PERIOD) {
             period(v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
             }
         }
-        else if (c == OPEN_PAREN) {
+        else if (c == YY_OPEN_PAREN) {
             open_p(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);
@@ -489,11 +489,11 @@ std::vector<SYMBOL> ReOperatorProcess::DoIt(std::vector<SYMBOL> processedRe)
             other(i, processedRe, v_temp);
             while (is_ext(i, processedRe)) {
                 i++;
-                if (processedRe[i] == QUESTION)
+                if (processedRe[i] == YY_QUESTION)
                     quest(v_temp);
-                else if (processedRe[i] == POSITIVE_CLOSURE)
+                else if (processedRe[i] == YY_POSITIVE_CLOSURE)
                     positive(v_temp);
-                else if (processedRe[i] == KLEENE_CLOSURE)
+                else if (processedRe[i] == YY_KLEENE_CLOSURE)
                     kleene(v_temp);
                 else
                     open_c(i, processedRe, v_temp);

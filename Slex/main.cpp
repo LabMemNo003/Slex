@@ -32,7 +32,7 @@ int main() {
     patterns[19] = "[\\ \\n\\f\\r\\t\\v]";
     patterns[20] = ".";
 
-    Re automas[21];
+	YY_Re automas[21];
     for (int i = 0; i < 21; i++) {
         automas[i].DoIt(patterns[i]);
     }

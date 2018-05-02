@@ -8,23 +8,23 @@
 
 //============================== PHASE 6 ==============================
 
-typedef class DfaToDriveTable {
+typedef class YY_DfaToDriveTable {
 public:
-    DfaToDriveTable(DFA dfa);
+	YY_DfaToDriveTable(DFA dfa);
 
     // You need to implement these methods.
-    void DoIt(NfaToDfa dfa);
-    NODE_ID GetStartNodeID();
-    std::set<NODE_ID> GetFinalNodeIDs();
-    NODE_ID GetNextNodeID(NODE_ID curNodeID, TERMINAL terminal);
+    void DoIt(YY_NfaToDfa dfa);
+	YY_NODE_ID GetStartNodeID();
+    std::set<YY_NODE_ID> GetFinalNodeIDs();
+	YY_NODE_ID GetNextNodeID(YY_NODE_ID curNodeID, YY_TERMINAL terminal);
     int Match(std::string input);
 
     void output();
 
 private:
     int stateCnt;
-    NODE_ID **dt;
-    NODE_ID startNode;
+	YY_NODE_ID **dt;
+	YY_NODE_ID startNode;
     bool *isEndNode;
 
 }DriveTable;

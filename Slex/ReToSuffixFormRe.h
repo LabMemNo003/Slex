@@ -7,13 +7,13 @@
 
 //============================== PHASE 3 ==============================
 
-class ReToSuffixFormRe {
+class YY_ReToSuffixFormRe {
 public:
     // You need to implement this method.
-    std::vector<SYMBOL> DoIt(std::vector<SYMBOL> processedRe);
+    std::vector<YY_SYMBOL> DoIt(std::vector<YY_SYMBOL> processedRe);
 	
 private:
-    std::vector<SYMBOL> toSuffix(std::vector<SYMBOL> processedRe);
-    int getPriority(OPERATOR op, int flag);
-    bool isOperator(SYMBOL ch);
+    std::vector<YY_SYMBOL> toSuffix(std::vector<YY_SYMBOL> processedRe);
+    int getPriority(YY_OPERATOR op, int flag);
+    bool isOperator(YY_SYMBOL ch);
 };
