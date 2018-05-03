@@ -121,10 +121,10 @@ int main(int argc, char *argv[]) {
         << "        YY_automas[YY_i].DoIt(YY_patterns[YY_i]);\n"
         << "    }\n"
         << "    \n"
-        << "    typedef void(*PtrFunc)(string);\n"
-        << "    PtrFunc YY_actions[" << cntStrs << "];\n";
+        << "    typedef void(*YY_PtrFunc)(string);\n"
+        << "    YY_PtrFunc YY_actions[" << cntStrs << "];\n";
     for (int i = 0; i < cntStrs; i++) {
-        outFile << "    YY_actions[" << i << "] = [](string str) " << actionStrs[i] << ";\n";
+        outFile << "    YY_actions[" << i << "] = [](string yytext) " << actionStrs[i] << ";\n";
     }
 
     outFile
