@@ -106,6 +106,8 @@ int main(int argc, char *argv[]) {
         << "\n"
         << "using namespace std;\n"
         << "\n"
+        << userCode
+        << "\n"
         << "int main(int argc, char *argv[]) {\n"
         << "    string YY_patterns[" << cntStrs << "];\n";
     for (int i = 0; i < cntStrs; i++) {
