@@ -8,18 +8,18 @@
 
 //============================== PHASE 4 ==============================
 
-typedef class SuffixFormReToNfa {
+typedef class YY_SuffixFormReToNfa {
 public:
-    SuffixFormReToNfa(std::vector<SYMBOL> suffixFormRe);
+	YY_SuffixFormReToNfa(std::vector<YY_SYMBOL> suffixFormRe);
     
     // You need to implement these methods.
-    void DoIt(std::vector<SYMBOL> suffixFormRe);
-    NODE_ID GetStartNodeID();
-    NODE_ID GetFinalNodeID();
-    std::set<NODE_ID> CalculateEpsilonClosure(NODE_ID nodeID);
-    std::set<NODE_ID> CalculateEpsilonClosure(std::set<NODE_ID> nodeIDs);
-    std::set<NODE_ID> GetNextNodeIDs(NODE_ID curNodeID, TERMINAL terminal);
-    std::set<NODE_ID> GetNextNodeIDs(std::set<NODE_ID> curNodeIDs, TERMINAL terminal);
+    void DoIt(std::vector<YY_SYMBOL> suffixFormRe);
+	YY_NODE_ID GetStartNodeID();
+	YY_NODE_ID GetFinalNodeID();
+    std::set<YY_NODE_ID> CalculateEpsilonClosure(YY_NODE_ID nodeID);
+    std::set<YY_NODE_ID> CalculateEpsilonClosure(std::set<YY_NODE_ID> nodeIDs);
+    std::set<YY_NODE_ID> GetNextNodeIDs(YY_NODE_ID curNodeID, YY_TERMINAL terminal);
+    std::set<YY_NODE_ID> GetNextNodeIDs(std::set<YY_NODE_ID> curNodeIDs, YY_TERMINAL terminal);
     int Match(std::string input);
 
     // Optional
@@ -30,12 +30,12 @@ public:
 private:
     struct Link;
     struct Node {
-        NODE_ID ID;
+		YY_NODE_ID ID;
         std::vector<Link*> fromLinks;
         std::vector<Link*> nextLinks;
     };
     struct Link {
-        TERMINAL terminal;
+		YY_TERMINAL terminal;
         Node* fromNode;
         Node* nextNode;
     };
@@ -46,7 +46,7 @@ private:
         std::vector<Link*> linkList;
     };
 
-    Graph *createGraph(TERMINAL t);
+    Graph *createGraph(YY_TERMINAL t);
     Graph *unionGraph(Graph *pg1, Graph *pg2);
     Graph *concatenateGraph(Graph *pg1, Graph *pg2);
     Graph *kleeneClosure(Graph *pg);

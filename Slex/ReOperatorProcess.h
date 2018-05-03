@@ -6,11 +6,11 @@
 
 //============================== PHASE 2 ==============================
 
-class ReOperatorProcess {
+class YY_ReOperatorProcess {
 public:
     // You need to implement this method.
-    std::vector<SYMBOL> DoIt(std::vector<SYMBOL> processedRe);
-    void display(const std::vector<SYMBOL> &v);
+    std::vector<YY_SYMBOL> DoIt(std::vector<YY_SYMBOL> processedRe);
+    void display(const std::vector<YY_SYMBOL> &v);
 
 private:
 

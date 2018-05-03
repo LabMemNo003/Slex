@@ -11,30 +11,30 @@
 #include<vector>
 #include<iostream>
 
-Re::Re()
+YY_Re::YY_Re()
 {
     dt = NULL;
 }
 
-Re::Re(std::string original_re)
+YY_Re::YY_Re(std::string original_re)
 {
     DoIt(original_re);
 }
 
-void Re::DoIt(std::string original_re)
+void YY_Re::DoIt(std::string original_re)
 {
-    ReSymbolProcess rsp;
-    std::vector<SYMBOL> processed_re_1 = rsp.DoIt(original_re);
+	YY_ReSymbolProcess rsp;
+    std::vector<YY_SYMBOL> processed_re_1 = rsp.DoIt(original_re);
 
-    ReOperatorProcess rop;
-    std::vector<SYMBOL> processed_re_2 = rop.DoIt(processed_re_1);
+	YY_ReOperatorProcess rop;
+    std::vector<YY_SYMBOL> processed_re_2 = rop.DoIt(processed_re_1);
 
 #ifdef DEBUG
     rop.display(processed_re_2);
 #endif //DEBUG
 
-    ReToSuffixFormRe rtsf;
-	std::vector<SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
+	YY_ReToSuffixFormRe rtsf;
+	std::vector<YY_SYMBOL> suffix_form_re = rtsf.DoIt(processed_re_2);
 
 #ifdef DEBUG
     for (int i = 0; i < suffix_form_re.size(); i++) {
@@ -63,7 +63,7 @@ void Re::DoIt(std::string original_re)
 
 }
 
-int Re::Match(std::string input)
+int YY_Re::Match(std::string input)
 {
     return dt->Match(input);
 }

@@ -4,10 +4,10 @@
 
 #include<string>
 
-class Re {
+class YY_Re {
 public:
-    Re();
-    Re(std::string original_re);
+	YY_Re();
+	YY_Re(std::string original_re);
     void DoIt(std::string original_re);
     int Match(std::string input);
 

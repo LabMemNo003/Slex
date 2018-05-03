@@ -4,39 +4,39 @@
 
 using namespace std;
 
-bool ReToSuffixFormRe::isOperator(SYMBOL ch) {
-    if (ch == OPEN_PAREN || ch == CLOSE_PAREN || ch == KLEENE_CLOSURE || ch == CONCATENATION || ch == UNION)
+bool YY_ReToSuffixFormRe::isOperator(YY_SYMBOL ch) {
+    if (ch == YY_OPEN_PAREN || ch == YY_CLOSE_PAREN || ch == YY_KLEENE_CLOSURE || ch == YY_CONCATENATION || ch == YY_UNION)
         return true;
     else
         return false;
 }
 
-int ReToSuffixFormRe::getPriority(OPERATOR op, int flag) {
-    if (op == KLEENE_CLOSURE) {
+int YY_ReToSuffixFormRe::getPriority(YY_OPERATOR op, int flag) {
+    if (op == YY_KLEENE_CLOSURE) {
         if (!flag)  //out of stack
             return 7;
         else 
             return 6;
     }
-    else if (op == CONCATENATION) {
+    else if (op == YY_CONCATENATION) {
         if (!flag)
             return 5;
         else
             return 4;
     }
-    else if (op == UNION) {
+    else if (op == YY_UNION) {
         if (!flag)
             return 3;
         else
             return 2;
     }
-    else if (op == OPEN_PAREN) {
+    else if (op == YY_OPEN_PAREN) {
         if (!flag)
             return 8;
         else
             return 1;
     }
-    else if (op == CLOSE_PAREN) {
+    else if (op == YY_CLOSE_PAREN) {
         if (!flag)
             return 1;
         else
@@ -44,9 +44,9 @@ int ReToSuffixFormRe::getPriority(OPERATOR op, int flag) {
     }
 }
 
-std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) {
-    std::stack<SYMBOL> s;
-    std::vector<SYMBOL> suffixRe;
+std::vector<YY_SYMBOL> YY_ReToSuffixFormRe::toSuffix(std::vector<YY_SYMBOL> processedRe) {
+    std::stack<YY_SYMBOL> s;
+    std::vector<YY_SYMBOL> suffixRe;
     int i = 0;
     while (i < processedRe.size()) {
         int cur = processedRe.at(i); 
@@ -62,9 +62,9 @@ std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) 
                 i++;
             }
             else {
-                if (cur == CLOSE_PAREN) {
-                    while (cur == CLOSE_PAREN && s.top() != OPEN_PAREN){
-                        SYMBOL sym = s.top();
+                if (cur == YY_CLOSE_PAREN) {
+                    while (cur == YY_CLOSE_PAREN && s.top() != YY_OPEN_PAREN){
+						YY_SYMBOL sym = s.top();
                         suffixRe.push_back(sym);
                         s.pop();
 					}
@@ -101,9 +101,9 @@ std::vector<SYMBOL> ReToSuffixFormRe::toSuffix(std::vector<SYMBOL> processedRe) 
     return suffixRe;
 }
 
-std::vector<SYMBOL> ReToSuffixFormRe::DoIt(std::vector<SYMBOL> processedRe)
+std::vector<YY_SYMBOL> YY_ReToSuffixFormRe::DoIt(std::vector<YY_SYMBOL> processedRe)
 {
-    std::vector<SYMBOL> suffixRe = toSuffix(processedRe);
+    std::vector<YY_SYMBOL> suffixRe = toSuffix(processedRe);
     /*std::stack<OPERATOR> opStack;  //operator stack
     std::stack<TERMINAL> termStack;  //terminal stack
     int i = suffixRe.size();
