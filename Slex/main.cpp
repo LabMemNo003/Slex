@@ -39,27 +39,27 @@ int main() {
 
     typedef void(*YY_PtrFunc)(string);
     YY_PtrFunc YY_actions[21];
-    YY_actions[0] = [](string str) { cout << "+" << endl; };
-    YY_actions[1] = [](string str) { cout << "-" << endl; };
-    YY_actions[2] = [](string str) { cout << "*" << endl; };
-    YY_actions[3] = [](string str) { cout << "/" << endl; };
-    YY_actions[4] = [](string str) { cout << ">" << endl; };
-    YY_actions[5] = [](string str) { cout << "<" << endl; };
-    YY_actions[6] = [](string str) { cout << "=" << endl; };
-    YY_actions[7] = [](string str) { cout << "(" << endl; };
-    YY_actions[8] = [](string str) { cout << ")" << endl; };
-    YY_actions[9] = [](string str) { cout << ";" << endl; };
-    YY_actions[10] = [](string str) { cout << "IF" << endl; };
-    YY_actions[11] = [](string str) { cout << "THEN" << endl; };
-    YY_actions[12] = [](string str) { cout << "ELSE" << endl; };
-    YY_actions[13] = [](string str) { cout << "WHILE" << endl; };
-    YY_actions[14] = [](string str) { cout << "DO" << endl; };
-    YY_actions[15] = [](string str) { cout << "IDN\t" << str << endl; };
-    YY_actions[16] = [](string str) { cout << "INT10\t" << str << endl; };
-    YY_actions[17] = [](string str) { cout << "INT8\t" << str << endl; };
-    YY_actions[18] = [](string str) { cout << "INT16\t" << str << endl; };
-    YY_actions[19] = [](string str) { };
-    YY_actions[20] = [](string str) { cout << "ERROR" << endl; };
+    YY_actions[0] = [](string yytext) { cout << "+" << endl; };
+    YY_actions[1] = [](string yytext) { cout << "-" << endl; };
+    YY_actions[2] = [](string yytext) { cout << "*" << endl; };
+    YY_actions[3] = [](string yytext) { cout << "/" << endl; };
+    YY_actions[4] = [](string yytext) { cout << ">" << endl; };
+    YY_actions[5] = [](string yytext) { cout << "<" << endl; };
+    YY_actions[6] = [](string yytext) { cout << "=" << endl; };
+    YY_actions[7] = [](string yytext) { cout << "(" << endl; };
+    YY_actions[8] = [](string yytext) { cout << ")" << endl; };
+    YY_actions[9] = [](string yytext) { cout << ";" << endl; };
+    YY_actions[10] = [](string yytext) { cout << "IF" << endl; };
+    YY_actions[11] = [](string yytext) { cout << "THEN" << endl; };
+    YY_actions[12] = [](string yytext) { cout << "ELSE" << endl; };
+    YY_actions[13] = [](string yytext) { cout << "WHILE" << endl; };
+    YY_actions[14] = [](string yytext) { cout << "DO" << endl; };
+    YY_actions[15] = [](string yytext) { cout << "IDN\t" << yytext << endl; };
+    YY_actions[16] = [](string yytext) { cout << "INT10\t" << yytext << endl; };
+    YY_actions[17] = [](string yytext) { cout << "INT8\t" << yytext << endl; };
+    YY_actions[18] = [](string yytext) { cout << "INT16\t" << yytext << endl; };
+    YY_actions[19] = [](string yytext) { };
+    YY_actions[20] = [](string yytext) { cout << "ERROR" << endl; };
 
 
     string YY_input = "0  92+data>  0x3f  00  while";
