@@ -1,6 +1,6 @@
 #pragma once
 
-#define YY_DEBUG
+//#define DEBUG
 
 #define YY_SYMBOL              int         //表示任意符号
 #define YY_OPERATOR            int         //表示运算符号

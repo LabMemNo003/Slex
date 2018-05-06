@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
     outFile
         << "    \n"
         << "    YY_Re YY_automas[" << cntStrs << "];\n"
-        << "    for (int YY_i = 0; YY_i < 21; YY_i++) {\n"
+        << "    for (int YY_i = 0; YY_i < " << cntStrs << "; YY_i++) {\n"
         << "        YY_automas[YY_i].DoIt(YY_patterns[YY_i]);\n"
         << "    }\n"
         << "    \n"
