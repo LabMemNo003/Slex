@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 
     string userCode;
     while (getline(inFile, line)) {
-        userCode = userCode + line;
+        userCode = userCode + line + '\n';
     }
 
     inFile.close();
