@@ -20,6 +20,7 @@ public:
     int Match(std::string input);
 
     void output();
+    int getStateCnt();
 
 private:
     int stateCnt;

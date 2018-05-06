@@ -3,6 +3,7 @@
 #include"DfaToDriveTable.h"
 
 #include<string>
+#include<fstream>
 
 class YY_Re {
 public:

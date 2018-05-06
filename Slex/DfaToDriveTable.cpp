@@ -100,3 +100,8 @@ void YY_DfaToDriveTable::output()
     cout << "++++++++++END++++++++++" << endl;
     cout << endl;
 }
+
+int YY_DfaToDriveTable::getStateCnt()
+{
+    return stateCnt;
+}

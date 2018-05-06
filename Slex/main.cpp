@@ -2,90 +2,160 @@
 
 #include<iostream>
 #include<string>
-#include<cstring>
+#include<fstream>
+#include<vector>
+#include<cstdio>
 
 using namespace std;
 
 //============================== T E S T ==============================
 
-int main() {
-    string YY_patterns[21];
-    YY_patterns[0] = "\\+";
-    YY_patterns[1] = "\\-";
-    YY_patterns[2] = "\\*";
-    YY_patterns[3] = "/";
-    YY_patterns[4] = ">";
-    YY_patterns[5] = "<";
-    YY_patterns[6] = "=";
-    YY_patterns[7] = "\\(";
-    YY_patterns[8] = "\\)";
-    YY_patterns[9] = ";";
-    YY_patterns[10] = "if";
-    YY_patterns[11] = "then";
-    YY_patterns[12] = "else";
-    YY_patterns[13] = "while";
-    YY_patterns[14] = "do";
-    YY_patterns[15] = "[a-zA-Z][a-zA-Z0-9]*";
-    YY_patterns[16] = "0|[1-9][0-9]*";
-    YY_patterns[17] = "0[0-7]+";
-    YY_patterns[18] = "0x[0-9a-fA-F]+";
-    YY_patterns[19] = "[\\ \\n\\f\\r\\t\\v]";
-    YY_patterns[20] = ".";
+int main(int argc, char *argv[]) {
+#ifdef DEBUG
+    cout << argv[0] << endl;
+#endif // DEBUG
 
-	YY_Re YY_automas[21];
-    for (int YY_i = 0; YY_i < 21; YY_i++) {
-        YY_automas[YY_i].DoIt(YY_patterns[YY_i]);
+    string inFileName;
+    cout << "Please input inFileName:\n";
+    getline(cin, inFileName);
+#ifdef DEBUG
+    cout << inFileName << endl;
+#endif // DEBUG
+
+
+    string outFileName;
+    cout << "Please input outFileName:\n";
+    getline(cin, outFileName);
+#ifdef DEBUG
+    cout << outFileName << endl;
+#endif // DEBUG
+
+
+    ifstream inFile(inFileName, ios::in);
+    if (!inFile.is_open()) {
+        cout << "Open file failure" << endl;
     }
 
-    typedef void(*YY_PtrFunc)(string);
-    YY_PtrFunc YY_actions[21];
-    YY_actions[0] = [](string yytext) { cout << "+" << endl; };
-    YY_actions[1] = [](string yytext) { cout << "-" << endl; };
-    YY_actions[2] = [](string yytext) { cout << "*" << endl; };
-    YY_actions[3] = [](string yytext) { cout << "/" << endl; };
-    YY_actions[4] = [](string yytext) { cout << ">" << endl; };
-    YY_actions[5] = [](string yytext) { cout << "<" << endl; };
-    YY_actions[6] = [](string yytext) { cout << "=" << endl; };
-    YY_actions[7] = [](string yytext) { cout << "(" << endl; };
-    YY_actions[8] = [](string yytext) { cout << ")" << endl; };
-    YY_actions[9] = [](string yytext) { cout << ";" << endl; };
-    YY_actions[10] = [](string yytext) { cout << "IF" << endl; };
-    YY_actions[11] = [](string yytext) { cout << "THEN" << endl; };
-    YY_actions[12] = [](string yytext) { cout << "ELSE" << endl; };
-    YY_actions[13] = [](string yytext) { cout << "WHILE" << endl; };
-    YY_actions[14] = [](string yytext) { cout << "DO" << endl; };
-    YY_actions[15] = [](string yytext) { cout << "IDN\t" << yytext << endl; };
-    YY_actions[16] = [](string yytext) { cout << "INT10\t" << yytext << endl; };
-    YY_actions[17] = [](string yytext) { cout << "INT8\t" << yytext << endl; };
-    YY_actions[18] = [](string yytext) { cout << "INT16\t" << yytext << endl; };
-    YY_actions[19] = [](string yytext) { };
-    YY_actions[20] = [](string yytext) { cout << "ERROR" << endl; };
-
-
-    string YY_input = "0  92+data>  0x3f  00  while";
-    cout << "Input string is:" << endl << endl << YY_input << endl;
-
-    cout << endl;
-
-    cout << "The result is:" << endl << endl;
-    int YY_ind = 0;
-    int YY_len = YY_input.length();
-    while (YY_ind < YY_len) {
-        int YY_max_match = 0;
-        int YY_max_pattern = 0;
-        for (int YY_i = 0; YY_i < 21; YY_i++) {
-            int YY_len_match = YY_automas[YY_i].Match(YY_input.substr(YY_ind));
-            if (YY_len_match > YY_max_match) {
-                YY_max_pattern = YY_i;
-                YY_max_match = YY_len_match;
-            }
+    string line;
+    while (getline(inFile, line)) {
+        if (line[0] == '%' && line[1] == '%') {
+            break;
         }
-        YY_actions[YY_max_pattern](YY_input.substr(YY_ind, YY_max_match));
-        YY_ind = YY_ind + YY_max_match;
     }
-    cout << endl;
 
-    system("pause");
+    vector<string> reStrs;
+    vector<string> actionStrs;
+    int cntStrs = 0;
+
+    while (getline(inFile, line)) {
+        if (line[0] == '%' && line[1] == '%') {
+            break;
+        }
+
+        string tmpRe;
+        string tmpAction;
+        
+        int ind = 0;
+        int len = line.length();
+        while (ind < len) {
+            if ((line[ind] == ' ' && line[ind - 1] != '\\') || line[ind] == '\t') {
+                reStrs.push_back(tmpRe);
+#ifdef DEBUG
+                cout << tmpRe << endl;
+#endif // DEBUG
+                break;
+            }
+            if (line[ind] == '\\')
+                tmpRe.push_back('\\');
+            tmpRe.push_back(line[ind]);
+            ind++;
+        }
+
+        while (line[ind] != '{') {
+            ind++;
+        }
+        tmpAction = line.substr(ind);
+        actionStrs.push_back(tmpAction);
+
+        cntStrs++;
+#ifdef DEBUG
+        cout << tmpAction << endl;
+#endif // DEBUG
+    }
+
+    string userCode;
+    while (getline(inFile, line)) {
+        userCode = userCode + line;
+    }
+
+    inFile.close();
+
+    //===============================================================
+
+    ofstream outFile(outFileName, ios::out);
+    if (!outFile.is_open()) {
+        cout << "Open file failure" << endl;
+    }
+
+    outFile
+        << "#include\"Re.h\"\n"
+        << "\n"
+        << "#include<iostream>\n"
+        << "#include<string>\n"
+        << "#include<cstdio>\n"
+        << "\n"
+        << "using namespace std;\n"
+        << "\n"
+        << userCode
+        << "\n"
+        << "int main(int argc, char *argv[]) {\n"
+        << "    string YY_patterns[" << cntStrs << "];\n";
+    for (int i = 0; i < cntStrs; i++) {
+        outFile << "    YY_patterns[" << i << "]=\"" << reStrs[i] << "\";\n";
+    }
+
+    outFile
+        << "    \n"
+        << "    YY_Re YY_automas[" << cntStrs << "];\n"
+        << "    for (int YY_i = 0; YY_i < " << cntStrs << "; YY_i++) {\n"
+        << "        YY_automas[YY_i].DoIt(YY_patterns[YY_i]);\n"
+        << "    }\n"
+        << "    \n"
+        << "    typedef void(*YY_PtrFunc)(string);\n"
+        << "    YY_PtrFunc YY_actions[" << cntStrs << "];\n";
+    for (int i = 0; i < cntStrs; i++) {
+        outFile << "    YY_actions[" << i << "] = [](string yytext) " << actionStrs[i] << ";\n";
+    }
+
+    outFile
+        << "    \n"
+        << "    string YY_input;\n"
+        << "    while (getline(cin, YY_input)){\n"
+        << "        int YY_ind = 0;\n"
+        << "        int YY_len = YY_input.length();\n"
+        << "        while (YY_ind < YY_len){\n"
+        << "            int YY_max_match = 0;\n"
+        << "            int YY_max_pattern = 0;\n"
+        << "            for (int YY_i = 0; YY_i < " << cntStrs << "; YY_i++) {\n"
+        << "                int YY_len_match = YY_automas[YY_i].Match(YY_input.substr(YY_ind));\n"
+        << "                if (YY_len_match > YY_max_match) {\n"
+        << "                    YY_max_pattern = YY_i;\n"
+        << "                    YY_max_match = YY_len_match;\n"
+        << "                }\n"
+        << "            }\n"
+        << "        YY_actions[YY_max_pattern](YY_input.substr(YY_ind, YY_max_match));\n"
+        << "        YY_ind = YY_ind + YY_max_match;\n"
+        << "        }\n"
+        << "    }\n"
+        << "    \n"
+        << "    getchar();\n"
+        << "    \n"
+        << "    return 0;\n"
+        << "}\n";
+
+    outFile.close();
+
+    getchar();
 
     return 0;
 }
