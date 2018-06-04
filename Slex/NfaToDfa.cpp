@@ -25,6 +25,10 @@ void YY_NfaToDfa::DoIt(YY_SuffixFormReToNfa nfa)
         set<YY_NODE_ID> curNode = nodes[ind];
         for (YY_TERMINAL t = 0; t < 128; t++)
         {
+            if (t == 'x') {
+                int a = 0;
+            }
+
             set<YY_NODE_ID> tmpNode = nfa.GetNextNodeIDs(curNode, t);
             set<YY_NODE_ID> nxtNode = nfa.CalculateEpsilonClosure(tmpNode);
 

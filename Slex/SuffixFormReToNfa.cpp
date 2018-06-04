@@ -133,7 +133,6 @@ std::set<YY_NODE_ID> YY_SuffixFormReToNfa::GetNextNodeIDs(YY_NODE_ID curNodeID, 
         ite != pNfaGraph->nodeList[curNodeID]->nextLinks.end(); ite++) {
         if ((*ite)->terminal == terminal) {
             resSet.insert((*ite)->nextNode->ID);
-            break;
         }
     }
     return resSet;
@@ -149,7 +148,6 @@ std::set<YY_NODE_ID> YY_SuffixFormReToNfa::GetNextNodeIDs(std::set<YY_NODE_ID> c
             ite != pNfaGraph->nodeList[curNodeID]->nextLinks.end(); ite++) {
             if ((*ite)->terminal == terminal) {
                 resSet.insert((*ite)->nextNode->ID);
-                break;
             }
         }
     }
